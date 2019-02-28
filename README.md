@@ -2,7 +2,7 @@
 Certificación Instructores Plan 111 Mil
 
 <p><b><strong>Productos de trabajo</strong></b></p>
-<ul>
+
   <ul>
     <li>Proyecto NetBeans</li> 
     <li>
@@ -16,7 +16,7 @@ Certificación Instructores Plan 111 Mil
     <li>nombre: </li>
     <li>ubicacion:</li>
   </ul>
-</ul>
+
 
 
 <p>Despliegue de la aplicación:</p>
