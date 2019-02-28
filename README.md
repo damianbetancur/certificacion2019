@@ -6,7 +6,7 @@ Certificación Instructores Plan 111 Mil
   <ul>
     <li>Proyecto NetBeans</li>     
       <ul>
-        <li>ubicacion:</li>
+        <li>ubicacion: https://github.com/betancurdamian/certificacion2019/tree/master/src/main</li>
       </ul>    
   </li>
   <li>Vista de Clases de Análisis</li> 
