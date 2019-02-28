@@ -8,7 +8,7 @@ Certificación Instructores Plan 111 Mil
       <ul>
         <li>ubicacion:</li>
       </ul>    
-  </ul>
+  </li>
   <li>Vista de Clases de Análisis</li> 
   <ul>
     <li>nombre: 
