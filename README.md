@@ -6,7 +6,7 @@ Certificación Instructores Plan 111 Mil
 <ul>
   <li>1- Diagrama Entidad Relación (DER)</li>
   <ul>
-    <li>ubicacion: certificacion2019/Documentacion/DER.jpg</li>
+    <li>ubicacion: https://github.com/betancurdamian/certificacion2019/blob/master/Documentacion/DER.png</li>
   </ul>
   <li>1- Diagrama Entidad Relación (DER)</li>
   <ul>
