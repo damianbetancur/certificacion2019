@@ -29,8 +29,8 @@ Certificación Instructores Plan 111 Mil
   
   <li>Script de creación de Base de Datos</li> 
   <ul>
-    <li>nombre: 
-      <ul><li>ubicación:</li></ul>
+    <li>nombre: sql_Torneo.sql
+      <ul><li>ubicación: https://github.com/betancurdamian/certificacion2019/blob/master/Documentacion/sql_Torneo.sql</li></ul>
     </li>      
   </ul>
   
