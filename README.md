@@ -17,6 +17,23 @@ Certificación Instructores Plan 111 Mil
     <li>nombre:</li>
       <ul><li>ubicación:</li></ul>
   </ul>
+  
+  <li>Diagrama de Secuencia</li> 
+  <ul>
+    <li>nombre: 
+      <ul><li>ubicación:</li></ul>
+    </li>  
+    <li>nombre:</li>
+      <ul><li>ubicación:</li></ul>
+  </ul>
+  
+  <li>Script de creación de Base de Datos</li> 
+  <ul>
+    <li>nombre: 
+      <ul><li>ubicación:</li></ul>
+    </li>      
+  </ul>
+  
    </ul>
 
 
