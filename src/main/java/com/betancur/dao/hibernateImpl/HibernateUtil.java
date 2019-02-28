@@ -20,8 +20,8 @@ public class HibernateUtil {
     
     static {
         try {
-            // Create the SessionFactory from standard (hibernate.cfg.xml) 
-            // config file.
+            // Crea el SessionFactory desde la ubicacion estandar del archivo (hibernate.cfg.xml) 
+            // ubicacion src/main/resources
             sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
         } catch (Throwable ex) {
             // Log the exception. 
