@@ -11,19 +11,19 @@ Certificación Instructores Plan 111 Mil
   </li>
   <li>Vista de Clases de Análisis</li> 
   <ul>
-    <li>nombre: 
+    <li>nombre: Diagrama de Clases de Análisis
       <ul><li>ubicación:</li></ul>
     </li>  
-    <li>nombre:</li>
+    <li>nombre: Diagrama de Clases de Implementación</li>
       <ul><li>ubicación:</li></ul>
   </ul>
   
   <li>Diagrama de Secuencia</li> 
   <ul>
-    <li>nombre: 
+    <li>nombre: Diagrama de Secuencia del Sistema (DSS)
       <ul><li>ubicación:</li></ul>
     </li>  
-    <li>nombre:</li>
+    <li>nombre: Diagrama de Secuencia del caso de uso: </li>
       <ul><li>ubicación:</li></ul>
   </ul>
   
