@@ -24,7 +24,7 @@ Certificación Instructores Plan 111 Mil
       <ul><li>ubicación: https://github.com/betancurdamian/certificacion2019/blob/master/Documentacion/Diagrama%20de%20Secuencia%20del%20Sistema.jpg</li></ul>
     </li>  
     <li>nombre: Diagrama de Secuencia del caso de uso: </li>
-      <ul><li>ubicación:</li></ul>
+      <ul><li>ubicación:https://github.com/betancurdamian/certificacion2019/blob/master/Documentacion/diagrama%20de%20secuencia%20del%20caso%20de%20uso.jpg</li></ul>
   </ul>
   
   <li>Script de creación de Base de Datos</li> 
