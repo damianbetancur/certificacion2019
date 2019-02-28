@@ -16,6 +16,7 @@ Certificación Instructores Plan 111 Mil
     </li>  
     <li>ubicacion:</li>
   </ul>
+   </ul>
 
 
 
