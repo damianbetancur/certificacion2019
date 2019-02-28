@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 24/02/2019 21:04:46 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.betancur.Competencia" table="competencia" catalog="torneo" optimistic-lock="version">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="categoria" class="com.betancur.Categoria" fetch="select">
+            <column name="id_categoria" not-null="true" />
+        </many-to-one>
+        
+        <many-to-one name="disciplina" class="com.betancur.Disciplina" column="id_disciplina" lazy="false" insert="false" update="false" />
+ 
+        <property name="fechaCompetencia" type="timestamp">
+            <column name="fechaCompetencia" length="19" />
+        </property>
+        <property name="horaCompetencia" type="timestamp">
+            <column name="horaCompetencia" length="19" />
+        </property>
+        
+        
+        <bag name="competidores" cascade="all" lazy="false">
+          <key column="id_competencia" not-null="true" />
+          <one-to-many class="com.betancur.Competidor" />
+        </bag>
+        
+        <bag name="inscripciones" cascade="all" lazy="false">
+          <key column="id_competencia" not-null="true" />
+          <one-to-many class="com.betancur.Inscripcion" />
+        </bag>
+                
+    </class>
+</hibernate-mapping>

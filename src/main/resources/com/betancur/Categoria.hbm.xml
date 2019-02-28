@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 24/02/2019 21:04:46 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.betancur.Categoria" table="categoria" catalog="torneo" optimistic-lock="version">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="edadDeFinalizacion" type="java.lang.Integer">
+            <column name="edadDeFinalizacion" />
+        </property>
+        <property name="edadDeInicio" type="java.lang.Integer">
+            <column name="edadDeInicio" />
+        </property>
+        <property name="nombreCategoria" type="string">
+            <column name="nombreCategoria" />
+        </property>
+        
+    </class>
+</hibernate-mapping>
