@@ -1,12 +1,17 @@
 # certificacion2019
 Certificación Instructores Plan 111 Mil
 
-<p><b><strong>Documentación:</strong></b></p>
-<p>Ubicación: https://github.com/betancurdamian/certificacion2019/tree/master/Documentacion</p>
-<p>Contenido:</p>
+<p><b><strong>Productos de trabajo</strong></b></p>
 <ul>
-  <li>1- Diagrama Entidad Relación (DER)</li>  
-  <li>1- Diagrama Entidad Relación (DER)</li>  
+  <li>Proyecto NetBeans</li> 
+  <ul>
+    <li>ubicacion:</li>
+  </ul>
+  <li>Vista de Clases de Análisis</li> 
+  <ul>
+    <li>nombre: </li>
+    <li>ubicacion:</li>
+  </ul>
 </ul>
 
 
