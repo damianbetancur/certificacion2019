@@ -21,7 +21,7 @@ Certificación Instructores Plan 111 Mil
   <li>Diagrama de Secuencia</li> 
   <ul>
     <li>nombre: Diagrama de Secuencia del Sistema (DSS)
-      <ul><li>ubicación:</li></ul>
+      <ul><li>ubicación: https://github.com/betancurdamian/certificacion2019/blob/master/Documentacion/Diagrama%20de%20Secuencia%20del%20Sistema.jpg</li></ul>
     </li>  
     <li>nombre: Diagrama de Secuencia del caso de uso: </li>
       <ul><li>ubicación:</li></ul>
