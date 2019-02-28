@@ -1,9 +1,13 @@
 # certificacion2019
 Certificación Instructores Plan 111 Mil
 
-<p>Documentación:</p>
+<p><b><strong>Documentación:</strong></b></p>
 <p>Ubicación: certificacion2019/Documentacion</p>
 <ul>
+  <li>1- Diagrama Entidad Relación (DER)</li>
+  <ul>
+    <li>ubicacion: certificacion2019/Documentacion/DER.jpg</li>
+  </ul>
   <li>1- Diagrama Entidad Relación (DER)</li>
   <ul>
     <li>ubicacion: certificacion2019/Documentacion/DER.jpg</li>
