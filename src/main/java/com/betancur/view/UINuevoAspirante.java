@@ -324,7 +324,7 @@ public class UINuevoAspirante extends javax.swing.JDialog {
         
         pantallaPadre.pintarFilaTablaDisciplina(primeraDisciplina);
         
-      
+        //modificar aqui
         
         
         for (AspiranteVO aspirante : pantallaPadre.getAspirantes()) {
