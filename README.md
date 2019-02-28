@@ -3,9 +3,13 @@ Certificación Instructores Plan 111 Mil
 
 <p><b><strong>Productos de trabajo</strong></b></p>
 <ul>
-  <li>Proyecto NetBeans</li> 
   <ul>
-    <li>ubicacion:</li>
+    <li>Proyecto NetBeans</li> 
+    <li>
+      <ul>
+        <li>ubicacion:</li>
+      </ul>
+    </li>  
   </ul>
   <li>Vista de Clases de Análisis</li> 
   <ul>
