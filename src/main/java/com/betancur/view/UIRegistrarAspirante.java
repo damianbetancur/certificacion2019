@@ -5,6 +5,7 @@
  */
 package com.betancur.view;
 
+import com.betancur.Disciplina;
 import com.betancur.view.resources.TablaAspirantesModel;
 import com.betancur.view.resources.TablaCategoriaModel;
 import com.betancur.view.resources.TablaDisciplinasModel;
@@ -13,7 +14,7 @@ import com.betancur.view.resources.TablaEscuelasModelListener;
 import com.betancur.vo.AspiranteVO;
 import com.betancur.Escuela;
 import com.betancur.controller.GestorDeInscripcion;
-import com.betancur.view.resources.TableCellRenderColor;
+import com.betancur.view.resources.ResaltadorDeTabla;
 import com.betancur.vo.DisciplinaVO;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -340,12 +341,14 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
         return retorno;
     }
     
+    
+    
     /**
      * Obtiene la posicion de la fila con el aspirante ingresado
      * @param aspiranteSeleccionado
      * @return 
      */
-    public int seleccionarAspirante(AspiranteVO aspiranteSeleccionado){
+    public int seleccionarFilaEnTablaAspirante(AspiranteVO aspiranteSeleccionado){
         int retorno = 0;
         int cantidadRegistro = tablaAspirantes.getRowCount();
         // validamos que hayan registros en la tabla
@@ -356,25 +359,40 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
     }
     
     public void pintarFilaTablaAspirante(int filaSeleccionada){
-        TableCellRenderColor tcrc = new TableCellRenderColor();
-        tcrc.setFilaSeleccionada(filaSeleccionada);
-        this.tablaAspirantes.setDefaultRenderer(Object.class, tcrc);
+        ResaltadorDeTabla rst = new ResaltadorDeTabla(filaSeleccionada);
+        this.tablaAspirantes.setDefaultRenderer(Object.class, rst);
     }
     
-    public int seleccionarDisciplina(DisciplinaVO disciplinaSeleccionada){
+    public int seleccionarFilaEnTablaDisciplina(AspiranteVO aspirante){
         int retorno = 0;
         int cantidadRegistro = tablaDisciplinas.getRowCount();
         // validamos que hayan registros en la tabla
         if (cantidadRegistro >= 0) {
-            retorno = tablaDisciplinasModel.obtenerDisciplinaEn(disciplinaSeleccionada);            
+            //obtiene la primera disciplina activa
+            retorno = tablaDisciplinasModel.obtenerLaPrimeraDisciplinaActivaEn(aspirante);            
         }
         return retorno;
     }
     
     public void pintarFilaTablaDisciplina(int filaSeleccionada){
-        TableCellRenderColor tcrc = new TableCellRenderColor();
-        tcrc.setFilaSeleccionada(filaSeleccionada);
-        this.tablaDisciplinas.setDefaultRenderer(Object.class, tcrc);
+        ResaltadorDeTabla rst = new ResaltadorDeTabla(filaSeleccionada);
+        this.tablaDisciplinas.setDefaultRenderer(Object.class, rst);
+    }
+    
+    public int seleccionarFilaEnTablaCategoria(DisciplinaVO disciplina){
+        int retorno = 0;
+        int cantidadRegistro = tablaCategorias.getRowCount();
+        // validamos que hayan registros en la tabla
+        if (cantidadRegistro >= 0) {
+            //obtiene la primera disciplina activa
+            retorno = tablaCategoriasModel.obtenerFilaDeCategoriaDeDisciplinaActiva(disciplina); 
+        }
+        return retorno;
+    }
+    
+    public void pintarFilaTablaCategoria(int filaSeleccionada){
+        ResaltadorDeTabla rst = new ResaltadorDeTabla(filaSeleccionada);
+        this.tablaCategorias.setDefaultRenderer(Object.class, rst);
     }
     
 

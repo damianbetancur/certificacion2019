@@ -5,6 +5,7 @@
  */
 package com.betancur.view.resources;
 
+import com.betancur.vo.AspiranteVO;
 import com.betancur.vo.DisciplinaVO;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,12 +107,21 @@ public class TablaDisciplinasModel extends AbstractTableModel {
         return COLUMNAS[index];
     }
 
-    public int obtenerDisciplinaEn(DisciplinaVO disciplinaSeleccionado) {
+    
+    public DisciplinaVO obtenerDisciplinaEn(int filaDisciplina) {
+        DisciplinaVO disciplinaEncontrada = null;  
+        disciplinaEncontrada = disciplinas.get(filaDisciplina);        
+        return disciplinaEncontrada;
+    }
+    
+     public int obtenerLaPrimeraDisciplinaActivaEn(AspiranteVO aspirante) {
+        boolean primeraEncontrada = false;
         int filaDisciplina = 0;
         int filaRecorrido = 0;
-        for (DisciplinaVO disciplinaeRecorrido : disciplinas) {
+        for (DisciplinaVO disciplinaeRecorrido : aspirante.getDisciplinas()) {
             filaRecorrido = filaRecorrido + 1;
-            if (disciplinaeRecorrido.getDisciplina().equals(disciplinaSeleccionado.getDisciplina())) {
+            if (disciplinaeRecorrido.getActivo()==true && primeraEncontrada==false) {
+                primeraEncontrada = true;
                 filaDisciplina = filaRecorrido;
             }
         }

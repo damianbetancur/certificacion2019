@@ -7,6 +7,8 @@ package com.betancur.view.resources;
 
 
 import com.betancur.Categoria;
+import com.betancur.Disciplina;
+import com.betancur.vo.DisciplinaVO;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -58,5 +60,17 @@ public class TablaCategoriaModel extends AbstractTableModel{
 
     public void setCategorias(List<Categoria> categorias) {
         this.categorias = categorias;
+    }
+    
+    public int obtenerFilaDeCategoriaDeDisciplinaActiva(DisciplinaVO disciplinaParametro) {        
+        int filaCategoria = 0;
+        int contador = 0;
+        for (Categoria categoria : categorias) {            
+            contador = contador + 1;
+            if (categoria.getId() == disciplinaParametro.getCategoria().getId()) {
+                filaCategoria = contador;
+            }
+        }
+        return filaCategoria;
     }
 }

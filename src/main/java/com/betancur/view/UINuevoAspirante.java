@@ -254,7 +254,7 @@ public class UINuevoAspirante extends javax.swing.JDialog {
             this.dispose();
             pantallaPadre.getTablaEscuelas().setEnabled(true);
         } else {
-
+            
             System.out.println("hay aspirante");
             this.dispose();
             pantallaPadre.getTablaEscuelas().setEnabled(false);
@@ -307,7 +307,7 @@ public class UINuevoAspirante extends javax.swing.JDialog {
         //Agrega el aspirante a la lista de aspirantes a registrar inscripciones son ValueObject necesarios
         pantallaPadre.getAspirantes().add(nuevoAspirante);
 
-        //agrega a la tabla el aspirante
+        //agrega a la tabla de aspirante el nuevo aspirante
         pantallaPadre.getTablaAspirantesModel().setAspirantes(pantallaPadre.getAspirantes());
         //actualiza el model para que se refresque la tabla
         pantallaPadre.getTablaAspirantesModel().fireTableDataChanged();
@@ -315,30 +315,35 @@ public class UINuevoAspirante extends javax.swing.JDialog {
         //Actualizar Tabla Categoria y tabla Disciplinas
         
         
-        //Seleccionar AspiranteVO
+        //Seleccionar AspiranteVO actual
         pantallaPadre.setAspiranteSeleccionadoVO(nuevoAspirante);
         
-        pantallaPadre.pintarFilaTablaAspirante(pantallaPadre.seleccionarAspirante(nuevoAspirante)-1);
+        //pinta el nuevo aspirante en la tabla aspirantes
+        pantallaPadre.pintarFilaTablaAspirante(pantallaPadre.seleccionarFilaEnTablaAspirante(nuevoAspirante)-1);
         
-        int primeraDisciplina = pantallaPadre.seleccionarDisciplina(nuevoAspirante.getDisciplinas().get(0))-1;
+               
+
+        //selecciona la fila primera disciplina del nuevo aspirante
+        int primeraDisciplina = pantallaPadre.seleccionarFilaEnTablaDisciplina(nuevoAspirante)-1;
         
+        //Disciplina Seleccionada
+        pantallaPadre.setDisciplinaSeleccionadaVO(pantallaPadre.getTablaDisciplinasModel().obtenerDisciplinaEn(primeraDisciplina));
+        
+        
+        //pinta la primera fila seleccionada de la disciplina
         pantallaPadre.pintarFilaTablaDisciplina(primeraDisciplina);
         
+        
+        //trae la disciplina con categoria ok
+        
+        
+        //pintar la categoria del aspirante                
+        int categoriaDeDisciplina = pantallaPadre.seleccionarFilaEnTablaCategoria(pantallaPadre.getDisciplinaSeleccionadaVO())-1;                
+        pantallaPadre.pintarFilaTablaCategoria(categoriaDeDisciplina);
+        
         //modificar aqui
-        
-        
-        for (AspiranteVO aspirante : pantallaPadre.getAspirantes()) {
-            System.out.println("Aspirante");
-            System.out.println("Nombre"+aspirante.getAspirante().getNombres()+" "+aspirante.getAspirante().getDireccion());
-            System.out.println("Categoria Aspirante: "+aspirante.getAspirante().getCategoria().getNombreCategoria());
-            for (DisciplinaVO disciplina : aspirante.getDisciplinas()) {
-                if(disciplina.getActivo()){
-                    System.out.println("Disciplinas Inscriptas");
-                    System.out.println("Disciplina: "+disciplina.getDisciplina().getNombre());
-                    System.out.println("categoria disciplina: "+disciplina.getCategoria().getNombreCategoria());
-                }                
-            }   
-        }
+                
+       
         
         
         this.jtf_nombres.requestFocus();
