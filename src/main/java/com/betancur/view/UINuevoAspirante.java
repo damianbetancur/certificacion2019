@@ -250,21 +250,34 @@ public class UINuevoAspirante extends javax.swing.JDialog {
 
     private void jbtn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_cancelarActionPerformed
 
+        /**
+         * verifica sobre la lista de nuevos aspirantes
+         */
         if (pantallaPadre.getAspirantes().isEmpty()) {
             this.dispose();
             pantallaPadre.getTablaEscuelas().setEnabled(true);
         } else {
-            
-            System.out.println("hay aspirante");
             this.dispose();
             pantallaPadre.getTablaEscuelas().setEnabled(false);
-            
-            //Comenzar con la asignacion de disciplinas 
+
+            //posiciona las tablas en el primer registro
+            pantallaPadre.seleccionarTablas(0);
+
+            //setea los registros a recorrer
+            pantallaPadre.setRegistrosTotalesDeAspirantes(pantallaPadre.getAspirantes().size());
+            //Setea el primer registro
+            pantallaPadre.setRegistroActualDeAspirante(0);
+
+            pantallaPadre.modificarCategoria(pantallaPadre.getAspiranteSeleccionadoVO());
+
         }
     }//GEN-LAST:event_jbtn_cancelarActionPerformed
 
     private void jbtn_aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_aceptarActionPerformed
-        //crea aspirante auxiliar
+        /**
+         * ---------------------------------------------------------------------
+         * Creación del aspirante auxiliar
+         */
         Aspirante aspiranteAuxiliar = new Aspirante();
         //Escuela seleccionada desde el controlador
         aspiranteAuxiliar.setEscuela(pantallaPadre.getControlador().getEscuelaEncontrada());
@@ -285,69 +298,18 @@ public class UINuevoAspirante extends javax.swing.JDialog {
         pantallaPadre.getControlador().asignarCategoria(aspiranteAuxiliar);
 
         //crea nuevo aspirante con arraylist de disciplinas inscriptas
-        AspiranteVO nuevoAspirante = new AspiranteVO(aspiranteAuxiliar);
-        
+        AspiranteVO nuevoAspiranteVO = new AspiranteVO(aspiranteAuxiliar);
+
         //Agregar las disciplinas por defecto
-        asignarDisciplinasPorDefecto(nuevoAspirante);
-        
-        //agrega a la tabla el Disciplina
-        pantallaPadre.getTablaDisciplinasModel().setDisciplinas(nuevoAspirante.getDisciplinas());
-        //actualiza el model para que se refresque la tabla     
-        
-        pantallaPadre.getTablaDisciplinasModel().visualizar(pantallaPadre.getTablaDisciplinas());
-        pantallaPadre.getTablaDisciplinas().setEnabled(false);
-        
-        //agrega a la tabla el Categoria
-        pantallaPadre.getTablaCategoriasModel().setCategorias(pantallaPadre.getControlador().listarCategorias());
-        //actualiza el model para que se refresque la tabla        
-        pantallaPadre.getTablaCategoriasModel().fireTableDataChanged();
-        pantallaPadre.getTablaCategorias().setEnabled(false);
-        
-        
-        //Agrega el aspirante a la lista de aspirantes a registrar inscripciones son ValueObject necesarios
-        pantallaPadre.getAspirantes().add(nuevoAspirante);
+        asignarDisciplinasPorDefecto(nuevoAspiranteVO);
 
-        //agrega a la tabla de aspirante el nuevo aspirante
-        pantallaPadre.getTablaAspirantesModel().setAspirantes(pantallaPadre.getAspirantes());
-        //actualiza el model para que se refresque la tabla
-        pantallaPadre.getTablaAspirantesModel().fireTableDataChanged();
-        pantallaPadre.getTablaAspirantes().setEnabled(false);
-        //Actualizar Tabla Categoria y tabla Disciplinas
-        
-        
-        //Seleccionar AspiranteVO actual
-        pantallaPadre.setAspiranteSeleccionadoVO(nuevoAspirante);
-        
-        //pinta el nuevo aspirante en la tabla aspirantes
-        pantallaPadre.pintarFilaTablaAspirante(pantallaPadre.seleccionarFilaEnTablaAspirante(nuevoAspirante)-1);
-        
-               
+        //Agrega al aspirante a la tabla
+        pantallaPadre.agregarAspiranteATabla(nuevoAspiranteVO);
 
-        //selecciona la fila primera disciplina del nuevo aspirante
-        int primeraDisciplina = pantallaPadre.seleccionarFilaEnTablaDisciplina(nuevoAspirante)-1;
-        
-        //Disciplina Seleccionada
-        pantallaPadre.setDisciplinaSeleccionadaVO(pantallaPadre.getTablaDisciplinasModel().obtenerDisciplinaEn(primeraDisciplina));
-        
-        
-        //pinta la primera fila seleccionada de la disciplina
-        pantallaPadre.pintarFilaTablaDisciplina(primeraDisciplina);
-        
-        
-        //trae la disciplina con categoria ok
-        
-        
-        //pintar la categoria del aspirante                
-        int categoriaDeDisciplina = pantallaPadre.seleccionarFilaEnTablaCategoria(pantallaPadre.getDisciplinaSeleccionadaVO())-1;                
-        pantallaPadre.pintarFilaTablaCategoria(categoriaDeDisciplina);
-        
-        //modificar aqui
-                
-       
-        
-        
+        //Hace foco en el jTextField nombres
         this.jtf_nombres.requestFocus();
 
+        //Limpia todos los campos para el ingreso de un nuevo aspirante
         limpiar();
         jbtn_aceptar.setEnabled(false);
     }//GEN-LAST:event_jbtn_aceptarActionPerformed
@@ -375,34 +337,30 @@ public class UINuevoAspirante extends javax.swing.JDialog {
     private void jtf_dniKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtf_dniKeyReleased
         habilitarBotonAceptar();
     }//GEN-LAST:event_jtf_dniKeyReleased
-
     /**
      * Verifica la fecha ingresada dentro del rango de edad 6 años a 17 años
-     * @param evt 
+     *
+     * @param evt
      */
     private void jdc_fechaDeNacimientoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jdc_fechaDeNacimientoPropertyChange
-        int edad=0;
+        int edad = 0;
         Date date;
         date = jdc_fechaDeNacimiento.getDate();
-        
-        if (date!=null) {
+        if (date != null) {
             habilitarBotonAceptar();
-            edad=validador.calcularEdad(date)+1;
-            if ((edad>=6) &&(edad<=17) ) {
-            }else{
-                JOptionPane.showConfirmDialog(this,"              La fecha ingresada es "+edad+" años \n"
-                                                   + "tiene que estar dentro del rango de 6 años a 17 años \n" 
-                                                   +"             modifique la fecha por favor", "Aceptar", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE);
-                
+            edad = validador.calcularEdad(date) + 1;
+            if ((edad >= 6) && (edad <= 17)) {
+            } else {
+                JOptionPane.showConfirmDialog(this, "              La fecha ingresada es " + edad + " años \n"
+                        + "tiene que estar dentro del rango de 6 años a 17 años \n"
+                        + "             modifique la fecha por favor", "Aceptar", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE);
+
                 this.jdc_fechaDeNacimiento.setCalendar(null);
             }
-            
-        }else{
+        } else {
             habilitarBotonAceptar();
         }
-        
     }//GEN-LAST:event_jdc_fechaDeNacimientoPropertyChange
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup_sexo;
@@ -424,7 +382,7 @@ public class UINuevoAspirante extends javax.swing.JDialog {
     private javax.swing.JTextField jtf_nombres;
     // End of variables declaration//GEN-END:variables
 
-    public void limpiar() {
+    private void limpiar() {
         this.jtf_nombres.setText("");
         this.jtf_apellido.setText("");
         this.jtf_direccion.setText("");
@@ -435,7 +393,7 @@ public class UINuevoAspirante extends javax.swing.JDialog {
 
     }
 
-    public void habilitarBotonAceptar() {
+    private void habilitarBotonAceptar() {
         if ((!jtf_nombres.getText().isEmpty()) && (!jtf_apellido.getText().isEmpty()) && (!jtf_direccion.getText().isEmpty()) && (jdc_fechaDeNacimiento.getDate() != null) && (!jtf_dni.getText().isEmpty())) {
 
             jbtn_aceptar.setEnabled(true);
@@ -443,25 +401,26 @@ public class UINuevoAspirante extends javax.swing.JDialog {
             jbtn_aceptar.setEnabled(false);
         }
     }
-    
+
     /**
-     * Recibe un AspiranteVO
-     * @param aspirante 
+     * Asigna disciplinas por defecto a un aspirante
+     *
+     * @param aspirante
      */
-    private void asignarDisciplinasPorDefecto(AspiranteVO aspirante){
-        List <DisciplinaVO> disciplinasVO = new ArrayList<>();
+    private void asignarDisciplinasPorDefecto(AspiranteVO aspirante) {
+        List<DisciplinaVO> disciplinasVO = new ArrayList<>();
         DisciplinaVO disciplinaVOAuxiliar;
-        
-        List <Disciplina> disciplinasTotales = pantallaPadre.getControlador().listarDisciplinas();
-        List <Disciplina> disciplinasPorDefecto = pantallaPadre.getControlador().disciplinasPorDefecto();
-        
+
+        List<Disciplina> disciplinasTotales = pantallaPadre.getControlador().listarDisciplinas();
+        List<Disciplina> disciplinasPorDefecto = pantallaPadre.getControlador().disciplinasPorDefecto();
+
         for (Disciplina disciplina : disciplinasTotales) {
             disciplinaVOAuxiliar = new DisciplinaVO();
-            disciplinaVOAuxiliar.setDisciplina(disciplina); 
+            disciplinaVOAuxiliar.setDisciplina(disciplina);
             disciplinaVOAuxiliar.setCategoria(aspirante.getAspirante().getCategoria());
             disciplinasVO.add(disciplinaVOAuxiliar);
         }
-        
+
         for (Disciplina disciplina : disciplinasPorDefecto) {
             for (DisciplinaVO disciplinaVO : disciplinasVO) {
                 if (disciplina.getNombre().equals(disciplinaVO.getDisciplina().getNombre())) {
@@ -469,16 +428,7 @@ public class UINuevoAspirante extends javax.swing.JDialog {
                 }
             }
         }
-        
         aspirante.setDisciplinas(disciplinasVO);
     }
-    
-    private void seleccionarCategoriaAspiranteEnTabla(){
-        //pantallaPadre.getTablaAspirantesModel().set
-    
-    }
-    
-    private void marcarPrimerAspirante(){
-    
-    }
+
 }

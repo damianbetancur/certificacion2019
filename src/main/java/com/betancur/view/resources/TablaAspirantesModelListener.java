@@ -24,14 +24,7 @@ public class TablaAspirantesModelListener implements ListSelectionListener {
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        //Corregir todo el metodo, capaz que no se utilice porque no se contempla la seleccion
-        // obtenemos la escuela seleccionada
-        //Aspirante seleccionado = pantallaRegistrarAspirante.seleccionarAspirante();
-        
-        //if(seleccionado!=null){
-            //ver
-        //}
-        
+              
         
         
     }

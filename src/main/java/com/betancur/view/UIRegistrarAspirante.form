@@ -239,6 +239,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Confirmar Disciplinas"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtn_confirmarDisciplinasActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

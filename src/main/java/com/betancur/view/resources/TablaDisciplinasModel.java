@@ -5,6 +5,7 @@
  */
 package com.betancur.view.resources;
 
+import com.betancur.view.UIRegistrarAspirante;
 import com.betancur.vo.AspiranteVO;
 import com.betancur.vo.DisciplinaVO;
 import java.util.ArrayList;
@@ -18,23 +19,26 @@ import javax.swing.table.DefaultTableModel;
  * @author David
  */
 public class TablaDisciplinasModel extends AbstractTableModel {
-
+    private final UIRegistrarAspirante pantallaRegistrarAspirante;
     private static final String[] COLUMNAS = {""};
 
     private boolean[] editable = {true, false};
     private List<DisciplinaVO> disciplinas;
 
-    public TablaDisciplinasModel() {
+    public TablaDisciplinasModel(UIRegistrarAspirante pantallaRegistrarAspirante) {
+        this.pantallaRegistrarAspirante = pantallaRegistrarAspirante;
         disciplinas = new ArrayList<>();
     }
 
-    public TablaDisciplinasModel(List<DisciplinaVO> disciplinas) {
+    public TablaDisciplinasModel(List<DisciplinaVO> disciplinas, UIRegistrarAspirante pantallaRegistrarAspirante) {
+        this.pantallaRegistrarAspirante = pantallaRegistrarAspirante;
         this.disciplinas = disciplinas;
     }
 
     public void visualizar(JTable tabla) {
-
-        tabla.setDefaultRenderer(Object.class, new Render());
+        
+        
+        tabla.setDefaultRenderer(Object.class, new RenderJButton());
 
         DefaultTableModel dt = new DefaultTableModel(new String[]{"", "Disciplina"}, 0) {
 
@@ -51,7 +55,7 @@ public class TablaDisciplinasModel extends AbstractTableModel {
                 return editable[column];
             }
         };
-       
+
         if (disciplinas.size() > 0) {
             for (int i = 0; i < disciplinas.size(); i++) {
                 Object fila[] = new Object[2];
@@ -64,7 +68,9 @@ public class TablaDisciplinasModel extends AbstractTableModel {
 
         }
 
-        tabla.setModel(dt);
+        tabla.setModel(dt);        
+        tabla.getModel().addTableModelListener(new TablaDisciplinaModelListener(pantallaRegistrarAspirante));
+        
         tabla.getColumnModel().getColumn(0).setPreferredWidth(20);
         tabla.getColumnModel().getColumn(1).setPreferredWidth(220);
     }
@@ -95,6 +101,9 @@ public class TablaDisciplinasModel extends AbstractTableModel {
         // según la columna deseada obtenemos el valor a mostrar
         switch (columna) {
             case 0:
+                retorno = aspirante.getActivo();
+                break;
+            case 1:                
                 retorno = aspirante.getDisciplina().getNombre();
                 break;
         }
@@ -107,20 +116,19 @@ public class TablaDisciplinasModel extends AbstractTableModel {
         return COLUMNAS[index];
     }
 
-    
     public DisciplinaVO obtenerDisciplinaEn(int filaDisciplina) {
-        DisciplinaVO disciplinaEncontrada = null;  
-        disciplinaEncontrada = disciplinas.get(filaDisciplina);        
+        DisciplinaVO disciplinaEncontrada = null;
+        disciplinaEncontrada = disciplinas.get(filaDisciplina);
         return disciplinaEncontrada;
     }
-    
-     public int obtenerLaPrimeraDisciplinaActivaEn(AspiranteVO aspirante) {
+
+    public int obtenerLaPrimeraDisciplinaActivaEn(AspiranteVO aspirante) {
         boolean primeraEncontrada = false;
         int filaDisciplina = 0;
         int filaRecorrido = 0;
         for (DisciplinaVO disciplinaeRecorrido : aspirante.getDisciplinas()) {
             filaRecorrido = filaRecorrido + 1;
-            if (disciplinaeRecorrido.getActivo()==true && primeraEncontrada==false) {
+            if (disciplinaeRecorrido.getActivo() == true && primeraEncontrada == false) {
                 primeraEncontrada = true;
                 filaDisciplina = filaRecorrido;
             }

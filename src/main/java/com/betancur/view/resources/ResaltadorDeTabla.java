@@ -50,14 +50,7 @@ public class ResaltadorDeTabla implements TableCellRenderer {
             c.setBackground(Color.LIGHT_GRAY);
             c.setForeground(Color.BLACK);
             // Si la celda esta en la fila indicada y esta seleccionada se coloreara de este modo
-        } else if (fila.compareTo(row) == 0 && isSelected == true) {
-            c.setBackground(Color.RED);
-            c.setForeground(Color.WHITE);
-            // Si la celda no esta en la fila indicada y esta seleccionada se coloreara de este modo
-        } else if (fila.compareTo(row) != 0 && isSelected == true) {
-            c.setBackground(Color.BLUE);
-            c.setForeground(Color.WHITE);
-            // En los demas casos se coloreara de este modo
+        
         } else {
             c.setBackground(Color.WHITE);
             c.setForeground(Color.BLACK);
