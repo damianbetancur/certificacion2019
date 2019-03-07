@@ -1,6 +1,6 @@
 package com.betancur;
 
-public class Escuela  implements java.io.Serializable {
+public class Escuela{
      private Long id;
      private Zona zona;
      private String barrio;

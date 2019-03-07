@@ -7,15 +7,22 @@ package com.betancur.controller;
 
 import com.betancur.Aspirante;
 import com.betancur.Categoria;
+import com.betancur.Competencia;
 import com.betancur.Disciplina;
 import com.betancur.Escuela;
+import com.betancur.Torneo;
 import com.betancur.dao.CategoriaDao;
+import com.betancur.dao.CompetenciaDao;
 import com.betancur.dao.hibernateImpl.CategoriaDaoHibernateImpl;
 import com.betancur.dao.DisciplinaDao;
 import com.betancur.dao.hibernateImpl.DisciplinaDaoHibernateImpl;
 import com.betancur.dao.EscuelaDao;
+import com.betancur.dao.TorneoDao;
+import com.betancur.dao.hibernateImpl.CompetenciaDaoHibernateImpl;
 import com.betancur.dao.hibernateImpl.EscuelaDaoHibernateImpl;
+import com.betancur.dao.hibernateImpl.TorneoDaoHibernateImpl;
 import com.betancur.view.UIRegistrarAspirante;
+import com.betancur.vo.AspiranteVO;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.SessionFactory;
@@ -29,7 +36,9 @@ public class GestorDeInscripcion {
     
     private final EscuelaDao escuelaDao;
     private final CategoriaDao categoriaDao;
-    private final DisciplinaDao disciplinaDao;
+    private final DisciplinaDao disciplinaDao;    
+    private final TorneoDao torneoDao;
+    private final CompetenciaDao competenciaDao;
     
     private Escuela escuelaEncontrada;
     
@@ -39,13 +48,18 @@ public class GestorDeInscripcion {
         this.escuelaDao = new EscuelaDaoHibernateImpl(sessionFactory);
         this.categoriaDao = new CategoriaDaoHibernateImpl(sessionFactory);
         this.disciplinaDao = new DisciplinaDaoHibernateImpl(sessionFactory);
+        this.torneoDao = new TorneoDaoHibernateImpl(sessionFactory);
+        this.competenciaDao = new CompetenciaDaoHibernateImpl(sessionFactory);
         
     }
     
     
     
     public void run () {
-        new UIRegistrarAspirante(this).setVisible(true);
+        /**
+         * parametros Controlador + torneo donde se realizaran las competencias
+         */
+        new UIRegistrarAspirante(this, torneoDao.buscarPorNombre("Cordoba Aniversario Primera Parte")).setVisible(true);
     }
     
     public List<Escuela> listarEscuelas () {
@@ -83,16 +97,28 @@ public class GestorDeInscripcion {
         
     }
     
-    public List <Disciplina> listarDisciplinas(){
-        return disciplinaDao.listarDisciplinas();
+    public List <Disciplina> listarDisciplinas(Torneo torneo){
+        return disciplinaDao.listarDisciplinas(torneo);
     }
     
-    public List <Disciplina> disciplinasPorDefecto(){
+    public List <Disciplina> disciplinasPorDefecto(Torneo torneo){
         List<Disciplina> retorno = new ArrayList<>();
-        retorno.add(disciplinaDao.buscarPorNombre("100 metros llanos"));
-        retorno.add(disciplinaDao.buscarPorNombre("50 metros con vallas"));
+        retorno.add(disciplinaDao.buscarPorNombre("100 metros llanos", torneo));
+        retorno.add(disciplinaDao.buscarPorNombre("50 metros con vallas",torneo));
         
         return retorno;
+    }
+    
+    public void guardarInscipcion(List<AspiranteVO> aspirantes){
+        for (AspiranteVO aspirante : aspirantes) {
+            
+        }
+    
+    }
+    
+    public Competencia buscarCometetenciaDeDisciplinaConCategoria(Disciplina disciplina, Categoria categoria){
+        return competenciaDao.buscarPorDisciplinaYCategoria(disciplina, categoria);
+    
     }
     
 }

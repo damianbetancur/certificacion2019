@@ -411,12 +411,13 @@ public class UINuevoAspirante extends javax.swing.JDialog {
         List<DisciplinaVO> disciplinasVO = new ArrayList<>();
         DisciplinaVO disciplinaVOAuxiliar;
 
-        List<Disciplina> disciplinasTotales = pantallaPadre.getControlador().listarDisciplinas();
-        List<Disciplina> disciplinasPorDefecto = pantallaPadre.getControlador().disciplinasPorDefecto();
+        List<Disciplina> disciplinasTotales = pantallaPadre.getControlador().listarDisciplinas(pantallaPadre.getTorneoActual());
+        List<Disciplina> disciplinasPorDefecto = pantallaPadre.getControlador().disciplinasPorDefecto(pantallaPadre.getTorneoActual());
 
         for (Disciplina disciplina : disciplinasTotales) {
-            disciplinaVOAuxiliar = new DisciplinaVO();
+            disciplinaVOAuxiliar = new DisciplinaVO();       
             disciplinaVOAuxiliar.setDisciplina(disciplina);
+            disciplinaVOAuxiliar.getDisciplina().setTorneo(pantallaPadre.getTorneoActual());
             disciplinaVOAuxiliar.setCategoria(aspirante.getAspirante().getCategoria());
             disciplinasVO.add(disciplinaVOAuxiliar);
         }

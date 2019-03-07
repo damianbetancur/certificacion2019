@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author David
+ * @author Ariel
  */
 public class TablaDisciplinasModel extends AbstractTableModel {
     private final UIRegistrarAspirante pantallaRegistrarAspirante;

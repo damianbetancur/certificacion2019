@@ -5,6 +5,8 @@
  */
 package com.betancur.view;
 
+import com.betancur.Categoria;
+import com.betancur.Competencia;
 import com.betancur.view.resources.TablaAspirantesModel;
 import com.betancur.view.resources.TablaCategoriaModel;
 import com.betancur.view.resources.TablaDisciplinasModel;
@@ -12,17 +14,16 @@ import com.betancur.view.resources.TablaEscuelasModel;
 import com.betancur.view.resources.TablaEscuelasModelListener;
 import com.betancur.vo.AspiranteVO;
 import com.betancur.Escuela;
+import com.betancur.Torneo;
 import com.betancur.controller.GestorDeInscripcion;
 import com.betancur.view.resources.ResaltadorDeTabla;
 import com.betancur.view.resources.TablaAspirantesModelListener;
-import com.betancur.view.resources.TablaDisciplinaModelListener;
 import com.betancur.vo.DisciplinaVO;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -34,26 +35,30 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
 
     //aspirantes con lista de competencias seleccionadas
     private final List<AspiranteVO> aspirantes;
+    private Torneo torneoActual;
+    private int registrosTotalesDeAspirantes;
+    private int registroActualDeAspirante;
+    private int registroActualDeCategoria;
 
     private AspiranteVO aspiranteSeleccionadoVO;
     private DisciplinaVO disciplinaSeleccionadaVO;
+    private Categoria categoriaSeleccionada;
 
     private final TablaEscuelasModel tablaEscuelasModel;
     private final TablaAspirantesModel tablaAspirantesModel;
     private final TablaDisciplinasModel tablaDisciplinasModel;
     private final TablaCategoriaModel tablaCategoriasModel;
 
-    private int registrosTotalesDeAspirantes;
-    private int registroActualDeAspirante;
-
     /**
      * Creates new form UIRegistrarAspirante
      *
      * @param controlador
+     * @param torneo
      */
-    public UIRegistrarAspirante(GestorDeInscripcion controlador) {
+    public UIRegistrarAspirante(GestorDeInscripcion controlador, Torneo torneo) {
         this.controlador = controlador;
         this.aspirantes = new ArrayList<>();
+        this.torneoActual = torneo;
 
         this.setResizable(false);
 
@@ -217,6 +222,11 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
 
         jbtn_confirmarCategoriaDisciplina.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jbtn_confirmarCategoriaDisciplina.setText("Confirmar Categoria");
+        jbtn_confirmarCategoriaDisciplina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtn_confirmarCategoriaDisciplinaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelCategoriasLayout = new javax.swing.GroupLayout(panelCategorias);
         panelCategorias.setLayout(panelCategoriasLayout);
@@ -296,6 +306,7 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -314,11 +325,28 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtn_nuevoAspiranteActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        //registra todos los aspirantes en sus respectivas competiciones seleccionadas
+        Competencia c = new Competencia();
+
+        for (AspiranteVO aspirante : aspirantes) {
+            System.out.println("aspirante: " + aspirante.getAspirante().getNombres());
+            for (DisciplinaVO disciplinaRecorrido : aspirante.getDisciplinas()) {
+                if (disciplinaRecorrido.getDisciplina().getTorneo() != null) {
+
+                    c = controlador.buscarCometetenciaDeDisciplinaConCategoria(disciplinaRecorrido.getDisciplina(), disciplinaRecorrido.getCategoria());
+
+                    System.out.println("disciplina id: " + disciplinaRecorrido.getDisciplina().getId());
+                    System.out.println("disciplina id_categoria: " + disciplinaRecorrido.getCategoria().getId());
+
+                    System.out.println("id competencia id_disciplina: " + c.getDisciplina().getId());
+                    System.out.println("id competencia id_Categoria: " + c.getCategoria().getId());
+                }
+
+            }
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void jbtn_confirmarDisciplinasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_confirmarDisciplinasActionPerformed
-        System.out.println("obtener las disciplinas y actualizarlas");
+
         tablaDisciplinasModel.fireTableDataChanged();
         //aspiranteSeleccionadoVO.setDisciplinas(tablaDisciplinasModel.getDisciplinas());
 
@@ -332,21 +360,32 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
             modificarCategoria(getAspirantes().get(getRegistroActualDeAspirante()));
 
         } else {//Llega al final de la lista
-            System.out.println("llego al final");
+            System.out.println("llego al finalasas");
+            btnAceptar.setEnabled(true);
+            /*      
+            //posiciona las tablas en el primer registro
+            seleccionarTablas(0);
+
+            //setea los registros a recorrer
+            setRegistrosTotalesDeAspirantes(getAspirantes().size());
+            //Setea el primer registro
+            setRegistroActualDeAspirante(0);
+
             //Comienza el siguiente proceso
+            int faseModificacionCategoria = JOptionPane.showConfirmDialog(this, "¿Desea Modificar la Categoria por Defecto? \n de la disciplina ", "Modificar Categoria!", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+
+            if (faseModificacionCategoria == 0) {//SI
+
+            }*/
+
         }
 
-        if (getRegistroActualDeAspirante() == getRegistrosTotalesDeAspirantes()) {
-            for (AspiranteVO aspirante : aspirantes) {
-                System.out.println("aspirante: " + aspirante.getAspirante().getNombres());
-                for (DisciplinaVO disciplinas : aspirante.getDisciplinas()) {
-                    System.out.println("disciplina: " + disciplinas.getDisciplina().getNombre());
-                    System.out.println("activo: " + disciplinas.getActivo());
-                }
-            }
-        }
 
     }//GEN-LAST:event_jbtn_confirmarDisciplinasActionPerformed
+
+    private void jbtn_confirmarCategoriaDisciplinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_confirmarCategoriaDisciplinaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbtn_confirmarCategoriaDisciplinaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -368,10 +407,6 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
     private javax.swing.JTable tablaDisciplinas;
     private javax.swing.JTable tablaEscuelas;
     // End of variables declaration//GEN-END:variables
-
-    public JTable getTablaDisciplinas() {
-        return tablaDisciplinas;
-    }
 
     public Escuela seleccionarEscuela() {
         Escuela retorno = null;
@@ -447,95 +482,17 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
         this.tablaCategorias.setDefaultRenderer(Object.class, rst);
     }
 
-    public TablaEscuelasModel getTablaEscuelasModel() {
-        return tablaEscuelasModel;
-    }
-
-    public GestorDeInscripcion getControlador() {
-        return controlador;
-    }
-
-    public javax.swing.JTable getTablaEscuelas() {
-        return tablaEscuelas;
-    }
-
-    public List<AspiranteVO> getAspirantes() {
-        return aspirantes;
-    }
-
-    public javax.swing.JTable getTablaAspirantes() {
-        return tablaAspirantes;
-    }
-
-    public void setTablaAspirantes(javax.swing.JTable tablaAspirantes) {
-        this.tablaAspirantes = tablaAspirantes;
-    }
-
-    public javax.swing.JTable getTablaCategorias() {
-        return tablaCategorias;
-    }
-
-    public void setTablaCategorias(javax.swing.JTable tablaCategorias) {
-        this.tablaCategorias = tablaCategorias;
-    }
-
-    public TablaAspirantesModel getTablaAspirantesModel() {
-        return tablaAspirantesModel;
-    }
-
-    public TablaDisciplinasModel getTablaDisciplinasModel() {
-        return tablaDisciplinasModel;
-    }
-
-    public TablaCategoriaModel getTablaCategoriasModel() {
-        return tablaCategoriasModel;
-    }
-
-    public javax.swing.JButton getBtnAceptar() {
-        return btnAceptar;
-    }
-
-    public javax.swing.JButton getBtnCancelar() {
-        return btnCancelar;
-    }
-
-    public javax.swing.JButton getJbtn_confirmarCategoriaDisciplina() {
-        return jbtn_confirmarCategoriaDisciplina;
-    }
-
-    public javax.swing.JButton getJbtn_confirmarDisciplinas() {
-        return jbtn_confirmarDisciplinas;
-    }
-
-    public javax.swing.JButton getJbtn_nuevoAspirante() {
-        return jbtn_nuevoAspirante;
-    }
-
-    public AspiranteVO getAspiranteSeleccionadoVO() {
-        return aspiranteSeleccionadoVO;
-    }
-
-    public void setAspiranteSeleccionadoVO(AspiranteVO aspiranteSeleccionadoVO) {
-        this.aspiranteSeleccionadoVO = aspiranteSeleccionadoVO;
-    }
-
-    public DisciplinaVO getDisciplinaSeleccionadaVO() {
-        return disciplinaSeleccionadaVO;
-    }
-
-    public void setDisciplinaSeleccionadaVO(DisciplinaVO disciplinaSeleccionadaVO) {
-        this.disciplinaSeleccionadaVO = disciplinaSeleccionadaVO;
-    }
-
     public void modificarCategoria(AspiranteVO aspiranteVO) {
 
         if (getRegistrosTotalesDeAspirantes() > 0 && getRegistroActualDeAspirante() < getRegistrosTotalesDeAspirantes()) {
-            int resp = JOptionPane.showConfirmDialog(this, "¿Desea Modificar la Categorias por Defecto? \n del aspirante " + aspiranteVO.getAspirante().getNombres() + " " + aspiranteVO.getAspirante().getApellido(), "Modificar Categoria!", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+            int faseModificacionDisciplina = JOptionPane.showConfirmDialog(this, "¿Desea Modificar las Disciplinas por Defecto? \n del aspirante " + aspiranteVO.getAspirante().getNombres() + " " + aspiranteVO.getAspirante().getApellido(), "Modificar Categoria!", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
 
-            if (resp == 0) {//SI
+            if (faseModificacionDisciplina == 0) {//SI
                 System.out.println("Modifica");
                 getTablaDisciplinas().setEnabled(true);
                 getJbtn_confirmarDisciplinas().setEnabled(true);
+
+                //seleccionarCategoriaDeDisciplina(FRAMEBITS);
             } else {//NO --Pasa al siguiente
                 getTablaDisciplinas().setEnabled(false);
                 getJbtn_confirmarDisciplinas().setEnabled(false);
@@ -548,7 +505,24 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
 
                 } else {//Llega al final de la lista
                     System.out.println("llego al final");
+
+                    //posiciona las tablas en el primer registro
+                    seleccionarTablas(0);
+
+                    //setea los registros a recorrer
+                    setRegistrosTotalesDeAspirantes(getAspirantes().size());
+                    //Setea el primer registro
+                    setRegistroActualDeAspirante(0);
+
                     //Comienza el siguiente proceso
+                    int faseModificacionCategoria = JOptionPane.showConfirmDialog(this, "¿Desea Modificar la Categoria por Defecto? \n de la disciplina ", "Modificar Categoria!", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+
+                    if (faseModificacionCategoria == 0) {//SI Modifica Categoria
+                        //
+                    } else {//NO Modifica Categoria
+                        //
+                    }
+
                 }
 
             }
@@ -556,22 +530,6 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
             System.out.println("no hay registros");
         }
 
-    }
-
-    public int getRegistrosTotalesDeAspirantes() {
-        return registrosTotalesDeAspirantes;
-    }
-
-    public void setRegistrosTotalesDeAspirantes(int registrosTotalesDeAspirantes) {
-        this.registrosTotalesDeAspirantes = registrosTotalesDeAspirantes;
-    }
-
-    public int getRegistroActualDeAspirante() {
-        return registroActualDeAspirante;
-    }
-
-    public void setRegistroActualDeAspirante(int registroActualDeAspirante) {
-        this.registroActualDeAspirante = registroActualDeAspirante;
     }
 
     public void seleccionarTablas(int seleccionAspirante) {
@@ -587,7 +545,7 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
         /**
          * Configuración de la tabla Disciplinas
          */
-        //Agrega a la tabla el Disciplina, las disciplinas seleccionadas y no seleccionadas del aspirante seleccionado
+        //Agrega a la tabla el Disciplina, las disciplinaRecorrido seleccionadas y no seleccionadas del aspirante seleccionado
         getTablaDisciplinasModel().setDisciplinas(getAspiranteSeleccionadoVO().getDisciplinas());
         //actualiza el TableModel para que se refresque la tabla     
         getTablaDisciplinasModel().visualizar(getTablaDisciplinas());
@@ -644,7 +602,7 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
         /**
          * Configuración de la tabla Disciplinas
          */
-        //Agrega a la tabla el Disciplina, las disciplinas seleccionadas y no seleccionadas del aspirante
+        //Agrega a la tabla el Disciplina, las disciplinaRecorrido seleccionadas y no seleccionadas del aspirante
         getTablaDisciplinasModel().setDisciplinas(nuevoAspiranteVO.getDisciplinas());
         //actualiza el TableModel para que se refresque la tabla     
         getTablaDisciplinasModel().visualizar(getTablaDisciplinas());
@@ -677,6 +635,152 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
                 disciplinaRecorrido = disciplinaVO;
             }
         }
+    }
 
+    public void seleccionarCategoriaDeDisciplina(int filaDisciplina) {
+
+        //Agrega la Disciplina Seleccionada 
+        setDisciplinaSeleccionadaVO(getTablaDisciplinasModel().obtenerDisciplinaEn(filaDisciplina));
+        //pinta la primera fila seleccionada de la disciplina
+        pintarFilaTablaDisciplina(filaDisciplina);
+
+        //pintar la categoria del aspirante                
+        setRegistroActualDeCategoria(seleccionarFilaEnTablaCategoria(getDisciplinaSeleccionadaVO()) - 1);
+        pintarFilaTablaCategoria(getRegistroActualDeCategoria());
+
+    }
+
+    /*
+    ----------------------------------------------------------------------------
+    Setters y Getters Componentes
+    ----------------------------------------------------------------------------
+     */
+    public javax.swing.JButton getBtnAceptar() {
+        return btnAceptar;
+    }
+
+    public javax.swing.JButton getBtnCancelar() {
+        return btnCancelar;
+    }
+
+    public javax.swing.JButton getJbtn_confirmarCategoriaDisciplina() {
+        return jbtn_confirmarCategoriaDisciplina;
+    }
+
+    public javax.swing.JButton getJbtn_confirmarDisciplinas() {
+        return jbtn_confirmarDisciplinas;
+    }
+
+    public javax.swing.JButton getJbtn_nuevoAspirante() {
+        return jbtn_nuevoAspirante;
+    }
+
+    public javax.swing.JTable getTablaAspirantes() {
+        return tablaAspirantes;
+    }
+
+    public void setTablaAspirantes(javax.swing.JTable tablaAspirantes) {
+        this.tablaAspirantes = tablaAspirantes;
+    }
+
+    public javax.swing.JTable getTablaCategorias() {
+        return tablaCategorias;
+    }
+
+    public void setTablaCategorias(javax.swing.JTable tablaCategorias) {
+        this.tablaCategorias = tablaCategorias;
+    }
+
+    public JTable getTablaDisciplinas() {
+        return tablaDisciplinas;
+    }
+
+    public javax.swing.JTable getTablaEscuelas() {
+        return tablaEscuelas;
+    }
+
+    /*
+    ----------------------------------------------------------------------------
+    Setters y Getters Variables
+    ----------------------------------------------------------------------------
+     */
+    public GestorDeInscripcion getControlador() {
+        return controlador;
+    }
+
+    public List<AspiranteVO> getAspirantes() {
+        return aspirantes;
+    }
+
+    public Torneo getTorneoActual() {
+        return torneoActual;
+    }
+
+    public void setTorneoActual(Torneo torneoActual) {
+        this.torneoActual = torneoActual;
+    }
+
+    public int getRegistrosTotalesDeAspirantes() {
+        return registrosTotalesDeAspirantes;
+    }
+
+    public void setRegistrosTotalesDeAspirantes(int registrosTotalesDeAspirantes) {
+        this.registrosTotalesDeAspirantes = registrosTotalesDeAspirantes;
+    }
+
+    public int getRegistroActualDeAspirante() {
+        return registroActualDeAspirante;
+    }
+
+    public void setRegistroActualDeAspirante(int registroActualDeAspirante) {
+        this.registroActualDeAspirante = registroActualDeAspirante;
+    }
+
+    public int getRegistroActualDeCategoria() {
+        return registroActualDeCategoria;
+    }
+
+    public void setRegistroActualDeCategoria(int registroActualDeCategoria) {
+        this.registroActualDeCategoria = registroActualDeCategoria;
+    }
+
+    public AspiranteVO getAspiranteSeleccionadoVO() {
+        return aspiranteSeleccionadoVO;
+    }
+
+    public void setAspiranteSeleccionadoVO(AspiranteVO aspiranteSeleccionadoVO) {
+        this.aspiranteSeleccionadoVO = aspiranteSeleccionadoVO;
+    }
+
+    public DisciplinaVO getDisciplinaSeleccionadaVO() {
+        return disciplinaSeleccionadaVO;
+    }
+
+    public void setDisciplinaSeleccionadaVO(DisciplinaVO disciplinaSeleccionadaVO) {
+        this.disciplinaSeleccionadaVO = disciplinaSeleccionadaVO;
+    }
+
+    public Categoria getCategoriaSeleccionada() {
+        return categoriaSeleccionada;
+    }
+
+    public void setCategoriaSeleccionada(Categoria categoriaSeleccionada) {
+        this.categoriaSeleccionada = categoriaSeleccionada;
+    }
+
+    public TablaEscuelasModel getTablaEscuelasModel() {
+        return tablaEscuelasModel;
+    }
+
+    public TablaAspirantesModel getTablaAspirantesModel() {
+        return tablaAspirantesModel;
+    }
+
+    public TablaDisciplinasModel getTablaDisciplinasModel() {
+        return tablaDisciplinasModel;
+    }
+
+    public TablaCategoriaModel getTablaCategoriasModel() {
+        return tablaCategoriasModel;
     }
 }

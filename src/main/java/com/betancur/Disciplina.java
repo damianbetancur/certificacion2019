@@ -3,7 +3,7 @@ package com.betancur;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Disciplina  implements java.io.Serializable {
+public class Disciplina{
      private Long id;
      private Torneo torneo;
      private String nombre;

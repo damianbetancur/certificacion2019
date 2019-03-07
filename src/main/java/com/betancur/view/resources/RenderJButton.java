@@ -33,7 +33,7 @@ public class RenderJButton extends DefaultTableCellRenderer {
         }
         
         return super.getTableCellRendererComponent(table, value, isSelected, 
-                hasFocus, row, column); //To change body of generated methods, choose Tools | Templates.
+                hasFocus, row, column); 
     }
     
 }

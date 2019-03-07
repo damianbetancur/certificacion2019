@@ -5,7 +5,6 @@
  */
 package com.betancur.view.resources;
 
-import com.betancur.Aspirante;
 import com.betancur.view.UIRegistrarAspirante;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;

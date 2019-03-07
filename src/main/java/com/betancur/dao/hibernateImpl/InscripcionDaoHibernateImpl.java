@@ -3,25 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.betancur.dao.impl;
+package com.betancur.dao.hibernateImpl;
 
 import com.betancur.Inscripcion;
 import com.betancur.dao.InscripcionDao;
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 /**
  *
  * @author Ariel
  */
-public class InscripcionDaoImpl implements InscripcionDao {
+public class InscripcionDaoHibernateImpl implements InscripcionDao{
 
-    private final List<Inscripcion> inscripciones;
+    private final SessionFactory sessionFactory;
 
-    public InscripcionDaoImpl() {
-        this.inscripciones = new ArrayList<>();
+    public InscripcionDaoHibernateImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
-
+    
+    
     @Override
     public Inscripcion buscarPorNombre(String nombre) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -29,7 +30,11 @@ public class InscripcionDaoImpl implements InscripcionDao {
 
     @Override
     public void guardar(Inscripcion nuevaInscripcion) {
-        this.inscripciones.add(nuevaInscripcion);
+        Session session = this.sessionFactory.openSession();
+        session.beginTransaction();
+        session.save(nuevaInscripcion);
+        session.getTransaction().commit();
+        session.close();
     }
-
+    
 }

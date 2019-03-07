@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Municipalidad  implements java.io.Serializable {
+public class Municipalidad{
      private Long id;
      private String direccion;
      private String nombre;

@@ -3,7 +3,7 @@ package com.betancur;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Aspirante  implements java.io.Serializable {
+public class Aspirante{
      private Long id;
      private Categoria categoria;
      private Escuela escuela;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Competencia  implements java.io.Serializable {
+public class Competencia{
      private Long id;
      private Categoria categoria;
      private Disciplina disciplina;

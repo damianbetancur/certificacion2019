@@ -3,7 +3,7 @@ package com.betancur;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Zona  implements java.io.Serializable {
+public class Zona{
      private Long id;
      private Municipalidad municipalidad;
      private String nombre;

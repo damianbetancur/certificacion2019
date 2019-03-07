@@ -1,6 +1,6 @@
 package com.betancur;
 
-public class Categoria  implements java.io.Serializable {
+public class Categoria{
      private Long id;
      private Integer edadDeFinalizacion;
      private Integer edadDeInicio;

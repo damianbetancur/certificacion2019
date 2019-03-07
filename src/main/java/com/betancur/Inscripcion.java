@@ -2,7 +2,7 @@ package com.betancur;
 
 import java.util.Date;
 
-public class Inscripcion  implements java.io.Serializable {
+public class Inscripcion{
      private Long id;
      private Aspirante aspirante;
      private Competencia competencia;

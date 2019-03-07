@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class Torneo  implements java.io.Serializable {
+public class Torneo{
      private Long id;
      private Municipalidad municipalidad;
      private Date fechaTorneo;

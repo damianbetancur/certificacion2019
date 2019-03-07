@@ -6,6 +6,7 @@
 package com.betancur.dao.hibernateImpl;
 
 import com.betancur.Disciplina;
+import com.betancur.Torneo;
 import com.betancur.dao.DisciplinaDao;
 import java.util.List;
 import org.hibernate.Query;
@@ -25,19 +26,19 @@ public class DisciplinaDaoHibernateImpl implements DisciplinaDao{
     
     
     @Override
-    public Disciplina buscarPorNombre(String nombre) {
+    public Disciplina buscarPorNombre(String nombre, Torneo torneo) {
         Session session = sessionFactory.openSession();
         
-        Disciplina disciplina = (Disciplina) session.createQuery("SELECT d FROM Disciplina d WHERE nombre=:nombre").setParameter("nombre", nombre).uniqueResult();
+        Disciplina disciplina = (Disciplina) session.createQuery("SELECT d FROM Disciplina d WHERE nombre=:nombre AND id_torneo=:idTorneo").setParameter("nombre", nombre).setParameter("idTorneo", torneo.getId()).uniqueResult();
                 
         return disciplina;
     }
 
     @Override
-    public List<Disciplina> listarDisciplinas() {
+    public List<Disciplina> listarDisciplinas(Torneo torneo) {
         Session session = sessionFactory.openSession();
         
-        Query query = session.createQuery("SELECT d FROM Disciplina d");
+        Query query = session.createQuery("SELECT d FROM Disciplina d WHERE id_torneo=:idTorneo").setParameter("idTorneo", torneo.getId());
         
         
         List<Disciplina> disciplinas = query.list();

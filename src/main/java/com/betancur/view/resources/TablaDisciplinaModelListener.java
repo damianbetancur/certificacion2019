@@ -5,14 +5,8 @@
  */
 package com.betancur.view.resources;
 
-import com.betancur.Escuela;
-import com.betancur.view.UINuevoAspirante;
+
 import com.betancur.view.UIRegistrarAspirante;
-import com.betancur.vo.DisciplinaVO;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
@@ -42,6 +36,7 @@ public class TablaDisciplinaModelListener implements TableModelListener {
             pantallaRegistrarAspirante.getAspiranteSeleccionadoVO().getDisciplinas().get(fila).setActivo(false);
         }
         
+        pantallaRegistrarAspirante.seleccionarCategoriaDeDisciplina(fila);
         
     }
 

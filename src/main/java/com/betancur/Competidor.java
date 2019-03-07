@@ -1,6 +1,6 @@
 package com.betancur;
 
-public class Competidor  implements java.io.Serializable {
+public class Competidor{
      private Long id;
      private Competencia competencia;
      private Inscripcion inscripcion;
