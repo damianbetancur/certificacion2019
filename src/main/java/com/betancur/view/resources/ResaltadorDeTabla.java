@@ -10,6 +10,7 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+
 /**
  *
  * @author Ariel
@@ -50,11 +51,13 @@ public class ResaltadorDeTabla implements TableCellRenderer {
             c.setBackground(Color.LIGHT_GRAY);
             c.setForeground(Color.BLACK);
             // Si la celda esta en la fila indicada y esta seleccionada se coloreara de este modo
-        
+            
+
         } else {
             c.setBackground(Color.WHITE);
             c.setForeground(Color.BLACK);
         }
+
         // Regresamos la celda para que se agrege a la tabla
         return c;
     }

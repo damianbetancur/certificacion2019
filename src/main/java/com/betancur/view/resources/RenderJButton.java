@@ -16,7 +16,7 @@ public class RenderJButton extends DefaultTableCellRenderer {
         
         if(value instanceof JButton){
             JButton btn = (JButton)value;
-            if(isSelected){
+            if(isSelected){                
                 btn.setForeground(table.getSelectionForeground());
                 btn.setBackground(table.getSelectionBackground());
             }else{

@@ -5,7 +5,6 @@
  */
 package com.betancur.view.resources;
 
-
 import com.betancur.view.UIRegistrarAspirante;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -22,27 +21,16 @@ public class TablaDisciplinaModelListener implements TableModelListener {
         this.pantallaRegistrarAspirante = pantallaRegistrarAspirante;
     }
 
-    
-
     @Override
     public void tableChanged(TableModelEvent e) {
         int fila = pantallaRegistrarAspirante.getTablaDisciplinas().getSelectedRow();
-        
         boolean seleccion = (boolean) pantallaRegistrarAspirante.getTablaDisciplinas().getValueAt(fila, 0);
-        
         if (seleccion) {
             pantallaRegistrarAspirante.getAspiranteSeleccionadoVO().getDisciplinas().get(fila).setActivo(true);
-        }else{
+        } else {
             pantallaRegistrarAspirante.getAspiranteSeleccionadoVO().getDisciplinas().get(fila).setActivo(false);
         }
-        
         pantallaRegistrarAspirante.seleccionarCategoriaDeDisciplina(fila);
-        
     }
-
-   
     
-    
-
-
 }

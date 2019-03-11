@@ -47,10 +47,12 @@ public class TablaDisciplinasModel extends AbstractTableModel {
                 java.lang.Object.class
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int row, int column) {
                 return editable[column];
             }
@@ -136,4 +138,15 @@ public class TablaDisciplinasModel extends AbstractTableModel {
         return filaDisciplina;
     }
 
+    public int obtenerFilaDeDisciplina(AspiranteVO aspirante, DisciplinaVO disciplinaSeleccionadaVO){
+        int filaDisciplina = 0;
+        int filaRecorrido = 0;
+        for (DisciplinaVO disciplinaeRecorrido : aspirante.getDisciplinas()) {
+            filaRecorrido = filaRecorrido + 1;
+            if (disciplinaeRecorrido.getDisciplina() ==  disciplinaSeleccionadaVO.getDisciplina()) {
+                filaDisciplina = filaRecorrido;
+            }
+        }
+        return filaDisciplina;
+    }
 }

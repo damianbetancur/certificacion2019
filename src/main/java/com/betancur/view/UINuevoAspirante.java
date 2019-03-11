@@ -268,7 +268,7 @@ public class UINuevoAspirante extends javax.swing.JDialog {
             //Setea el primer registro
             pantallaPadre.setRegistroActualDeAspirante(0);
 
-            pantallaPadre.modificarCategoria(pantallaPadre.getAspiranteSeleccionadoVO());
+            pantallaPadre.modificarDisciplinas(pantallaPadre.getAspiranteSeleccionadoVO());
 
         }
     }//GEN-LAST:event_jbtn_cancelarActionPerformed
@@ -314,6 +314,12 @@ public class UINuevoAspirante extends javax.swing.JDialog {
         jbtn_aceptar.setEnabled(false);
     }//GEN-LAST:event_jbtn_aceptarActionPerformed
 
+    /*
+     *--------------------------------------------------------------------------
+     *----------------Escuchadores de campos de texto---------------------------
+     *--------------------------------------------------------------------------
+     */
+    
     private void jtf_nombresKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtf_nombresKeyReleased
         habilitarBotonAceptar();
     }//GEN-LAST:event_jtf_nombresKeyReleased
@@ -337,6 +343,7 @@ public class UINuevoAspirante extends javax.swing.JDialog {
     private void jtf_dniKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtf_dniKeyReleased
         habilitarBotonAceptar();
     }//GEN-LAST:event_jtf_dniKeyReleased
+
     /**
      * Verifica la fecha ingresada dentro del rango de edad 6 años a 17 años
      *
@@ -415,7 +422,7 @@ public class UINuevoAspirante extends javax.swing.JDialog {
         List<Disciplina> disciplinasPorDefecto = pantallaPadre.getControlador().disciplinasPorDefecto(pantallaPadre.getTorneoActual());
 
         for (Disciplina disciplina : disciplinasTotales) {
-            disciplinaVOAuxiliar = new DisciplinaVO();       
+            disciplinaVOAuxiliar = new DisciplinaVO();
             disciplinaVOAuxiliar.setDisciplina(disciplina);
             disciplinaVOAuxiliar.getDisciplina().setTorneo(pantallaPadre.getTorneoActual());
             disciplinaVOAuxiliar.setCategoria(aspirante.getAspirante().getCategoria());
