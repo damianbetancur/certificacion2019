@@ -16,7 +16,8 @@ import java.util.List;
 public class AspiranteVO {
     private Aspirante aspirante;
     private List<DisciplinaVO> disciplinas;
-
+    private boolean completo;
+    
     public AspiranteVO(Aspirante aspirante) {
         this.aspirante = aspirante;
         disciplinas = new ArrayList<>();
@@ -36,6 +37,26 @@ public class AspiranteVO {
 
     public void setDisciplinas(List<DisciplinaVO> disciplinas) {
         this.disciplinas = disciplinas;
+    }
+    
+    public boolean verificarDisciplinasActivas() {
+        int cantidadDisciplinasActivasAspirante=0;
+        
+        for (DisciplinaVO disciplina : this.getDisciplinas()) {
+            if (disciplina.getActivo()) {
+                cantidadDisciplinasActivasAspirante = cantidadDisciplinasActivasAspirante + 1;
+            }            
+        }
+        if (cantidadDisciplinasActivasAspirante>0) {
+            this.completo = true;
+        }else{
+            this.completo = false;
+        }
+        return completo;
+    }
+
+    public boolean isCompleto() {
+        return completo;
     }
     
     

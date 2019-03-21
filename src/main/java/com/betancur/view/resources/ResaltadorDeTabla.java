@@ -47,17 +47,19 @@ public class ResaltadorDeTabla implements TableCellRenderer {
         Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
         // Si la celda esta en la fila indicada y no esta seleccionada se coloreara de este modo        
-        if (fila.compareTo(row) == 0 && isSelected == false) {
-            c.setBackground(Color.LIGHT_GRAY);
-            c.setForeground(Color.BLACK);
-            // Si la celda esta en la fila indicada y esta seleccionada se coloreara de este modo
-            
-
+        if (fila.compareTo(row) == 0) {
+            if (!isSelected) {
+                c.setBackground(Color.LIGHT_GRAY);
+                c.setForeground(Color.BLACK);
+                // Si la celda esta en la fila indicada y esta seleccionada se coloreara de este modo
+            } else {
+                table.setBackground(Color.WHITE);
+                table.setForeground(Color.BLACK);
+            }
         } else {
             c.setBackground(Color.WHITE);
             c.setForeground(Color.BLACK);
         }
-
         // Regresamos la celda para que se agrege a la tabla
         return c;
     }

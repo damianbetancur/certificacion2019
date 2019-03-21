@@ -18,6 +18,7 @@ import com.betancur.Torneo;
 import com.betancur.controller.GestorDeInscripcion;
 import com.betancur.view.resources.ResaltadorDeTabla;
 import com.betancur.view.resources.TablaAspirantesModelListener;
+import com.betancur.view.resources.TablaCategoriaModelListener;
 import com.betancur.vo.DisciplinaVO;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -89,6 +90,10 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
 
         //agrega escuchadores de las tabla Aspirante
         tablaAspirantes.getSelectionModel().addListSelectionListener(new TablaAspirantesModelListener(this));
+
+        //agrega escuchadores de las tabla Categoria
+        tablaCategorias.getSelectionModel().addListSelectionListener(new TablaCategoriaModelListener(this));
+
     }
 
     /**
@@ -115,7 +120,7 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         tablaCategorias = new javax.swing.JTable();
         jbtn_confirmarCategoriaDisciplina = new javax.swing.JButton();
-        btnAceptar = new javax.swing.JButton();
+        jbtn_Aceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -257,11 +262,11 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnAceptar.setText("Aceptar");
-        btnAceptar.setEnabled(false);
-        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+        jbtn_Aceptar.setText("Aceptar");
+        jbtn_Aceptar.setEnabled(false);
+        jbtn_Aceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAceptarActionPerformed(evt);
+                jbtn_AceptarActionPerformed(evt);
             }
         });
 
@@ -283,7 +288,7 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(panelAspirantes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAceptar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jbtn_Aceptar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(panelCompetencias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -306,7 +311,7 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jbtn_Aceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21))
         );
 
@@ -344,63 +349,70 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        Competencia c = new Competencia();
+    private void jbtn_AceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_AceptarActionPerformed
+        
+
+        //1- Recorrer cada aspiranteVO, verificando si tiene disciplinas cargadas
+        //2-Si tiene disciplina cargada marcar como completo en AspiranteVO
+        for (AspiranteVO aspirante : aspirantes) {
+            aspirante.verificarDisciplinasActivas();
+        }
 
         for (AspiranteVO aspirante : aspirantes) {
-            System.out.println("aspirante: " + aspirante.getAspirante().getNombres());
-            for (DisciplinaVO disciplinaRecorrido : aspirante.getDisciplinas()) {
-                if (disciplinaRecorrido.getDisciplina().getTorneo() != null) {
-
-                    c = controlador.buscarCometetenciaDeDisciplinaConCategoria(disciplinaRecorrido.getDisciplina(), disciplinaRecorrido.getCategoria());
-
-                    System.out.println("disciplina id: " + disciplinaRecorrido.getDisciplina().getId());
-                    System.out.println("disciplina id_categoria: " + disciplinaRecorrido.getCategoria().getId());
-
-                    System.out.println("id competencia id_disciplina: " + c.getDisciplina().getId());
-                    System.out.println("id competencia id_Categoria: " + c.getCategoria().getId());
-                }
-
+            if (!aspirante.isCompleto()) {
+                agregarDisciplinasVacias(aspirante);
             }
+
         }
-    }//GEN-LAST:event_btnAceptarActionPerformed
+        //1-Recorrer cada aspiranteVO, verificando si esta completo
+        //2-NO!!! esta completo llamar al metodo modificarDisciplina(aspiranteActualVO)--> hacer nuevo metodo
+        //3-SI!!! esta completo, llamar al metodo guardarCompetencias()
+    }//GEN-LAST:event_jbtn_AceptarActionPerformed
 
     /**
      *
      * @param evt
      */
     private void jbtn_confirmarDisciplinasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_confirmarDisciplinasActionPerformed
+        if (!aspiranteSeleccionadoVO.isCompleto()) {
 
-        tablaDisciplinasModel.fireTableDataChanged();
-        //aspiranteSeleccionadoVO.setDisciplinas(tablaDisciplinasModel.getDisciplinas());
+            int proximoAspirante = 0;
 
-        getTablaDisciplinas().setEnabled(false);
-        getJbtn_confirmarDisciplinas().setEnabled(false);
-        setRegistroActualDeAspirante(getRegistroActualDeAspirante() + 1);
-        if (getRegistroActualDeAspirante() < getRegistrosTotalesDeAspirantes()) {
-            //posiciona las tablas
-            seleccionarTablas(getRegistroActualDeAspirante());
-            //se llama a si mismo
-            modificarDisciplinas(getAspirantes().get(getRegistroActualDeAspirante()));
+            getTablaDisciplinas().setEnabled(false);
+            getJbtn_confirmarDisciplinas().setEnabled(false);
+            //1-actualizar el registro actual
+            tablaDisciplinasModel.fireTableDataChanged();
 
-        } else {//Llega al final de la lista
-            System.out.println("llego al final por el boton");
+            getAspirantes().get(seleccionarFilaEnTablaAspirante(aspiranteSeleccionadoVO) - 1).setDisciplinas(tablaDisciplinasModel.getDisciplinas());
 
-            //posiciona las tablas en el primer registro
-            seleccionarTablas(0);
+            proximoAspirante = getRegistroActualDeAspirante() + 1;
 
-            //setea los registros a recorrer
-            setRegistrosTotalesDeAspirantes(getAspirantes().size());
-            //Setea el primer registro
-            setRegistroActualDeAspirante(0);
+            if (proximoAspirante < getRegistrosTotalesDeAspirantes()) {//SI Existe proximo aspirante
+                //Setea proximo aspirante
+                setRegistroActualDeAspirante(proximoAspirante);
+                /**
+                 * Tabla aspirante --> aspiranteSeleccionadoVO Tabla
+                 * disciplina--> primer disciplina activa del
+                 * aspiranteSeleccionadoVO Tabla Categoria --> de la disciplina
+                 * activa, selecciona la categoria
+                 */
+                seleccionarTablas(getRegistroActualDeAspirante());
+                //Recursividad con proximo aspirante
+                modificarDisciplinas(getAspiranteSeleccionadoVO());
 
-            //setea las disciplinas del 1er aspitante
-            setRegistrosTotalesDeDisciplinas(calcularRegistrosTotalesDeDisciplinas(getAspiranteSeleccionadoVO().getDisciplinas()));
-
-            modificarCategoriasDeDisciplinas(getAspiranteSeleccionadoVO());
+            } else {//No existe proximo aspirante
+                //posicionar 1er registro    
+                setRegistroActualDeAspirante(0);
+                /**
+                 * Tabla aspirante --> aspiranteSeleccionadoVO Tabla
+                 * disciplina--> primer disciplina activa del
+                 * aspiranteSeleccionadoVO Tabla Categoria --> de la disciplina
+                 * activa, selecciona la categoria
+                 */
+                seleccionarTablas(getRegistroActualDeAspirante());
+                modificarCategoriasDeDisciplinas(getAspiranteSeleccionadoVO());
+            }
         }
-
-
     }//GEN-LAST:event_jbtn_confirmarDisciplinasActionPerformed
 
     /**
@@ -408,17 +420,77 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
      * @param evt
      */
     private void jbtn_confirmarCategoriaDisciplinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_confirmarCategoriaDisciplinaActionPerformed
-        // TODO add your handling code here:
+        if (!aspiranteSeleccionadoVO.isCompleto()) {
+            int proximoAspirante = 0;
+            //seter categoria
+            getAspirantes().get(seleccionarFilaEnTablaAspirante(aspiranteSeleccionadoVO) - 1).getDisciplinas().get(getRegistroActualDeDisciplina()).setCategoria(getCategoriaSeleccionada());
+
+            this.tablaCategorias.setEnabled(false);
+            this.jbtn_confirmarCategoriaDisciplina.setEnabled(false);
+
+            //proxima disciplinaas
+            int proximaDisciplina = obtenerProximaDisciplinaActiva(aspiranteSeleccionadoVO, disciplinaSeleccionadaVO);
+
+            System.out.println("proxima disciplina " + proximaDisciplina);
+            if (proximaDisciplina > 0) {//SI existe proxima Disciplina
+                //proxima disciplina activa del aspirante actual
+                setRegistroActualDeDisciplina(proximaDisciplina);
+                setDisciplinaSeleccionadaVO(getAspirantes().get(seleccionarFilaEnTablaAspirante(aspiranteSeleccionadoVO) - 1).getDisciplinas().get(proximaDisciplina));
+
+                //categoria de la proxima disciplina
+                setCategoriaSeleccionada(getAspirantes().get(seleccionarFilaEnTablaAspirante(aspiranteSeleccionadoVO) - 1).getDisciplinas().get(proximaDisciplina).getCategoria());
+
+                modificarCategoriasDeDisciplinas(this.getAspiranteSeleccionadoVO());
+
+            } else {//NO existe proxima Disciplina
+                System.out.println("No hay mas disciplinas activas del aspirante");
+                //1-pasa al siguiente aspirante
+                //2-posiciona primera disciplina activa
+                //3-llama al metodo
+
+                proximoAspirante = getRegistroActualDeAspirante() + 1;
+
+                if (proximoAspirante < getRegistrosTotalesDeAspirantes()) {//SI Existe proximo aspirante
+                    //Setea proximo aspirante
+                    setRegistroActualDeAspirante(proximoAspirante);
+                    /**
+                     * Tabla aspirante --> aspiranteSeleccionadoVO Tabla
+                     * disciplina--> primer disciplina activa del
+                     * aspiranteSeleccionadoVO Tabla Categoria --> de la
+                     * disciplina activa, selecciona la categoria
+                     */
+                    seleccionarTablas(getRegistroActualDeAspirante());
+                    //Recursividad con proximo aspirante
+                    modificarCategoriasDeDisciplinas(getAspiranteSeleccionadoVO());
+
+                } else {//No existe proximo aspirante
+                    //posicionar 1er registro    
+                    System.out.println("validación por boton");
+                    /**
+                     * Tabla aspirante --> aspiranteSeleccionadoVO Tabla
+                     * disciplina--> primer disciplina activa del
+                     * aspiranteSeleccionadoVO Tabla Categoria --> de la
+                     * disciplina activa, selecciona la categoria
+                     */
+
+                    //seleccionarTablas(getRegistroActualDeAspirante());
+                    //llama a la validacion
+                    this.jbtn_Aceptar.setEnabled(true);
+                }
+
+            }
+
+        }
     }//GEN-LAST:event_jbtn_confirmarCategoriaDisciplinaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JButton jbtn_Aceptar;
     private javax.swing.JButton jbtn_confirmarCategoriaDisciplina;
     private javax.swing.JButton jbtn_confirmarDisciplinas;
     private javax.swing.JButton jbtn_nuevoAspirante;
@@ -439,7 +511,7 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
      *--------------------------------------------------------------------------
      */
     public javax.swing.JButton getBtnAceptar() {
-        return btnAceptar;
+        return jbtn_Aceptar;
     }
 
     public javax.swing.JButton getBtnCancelar() {
@@ -617,6 +689,11 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
      * @param seleccionAspirante
      */
     public void seleccionarTablas(int seleccionAspirante) {
+        System.out.println("Antes");
+        System.out.println("aspirante actual: " + getRegistroActualDeAspirante());
+        System.out.println("disciplina actual : " + getRegistroActualDeDisciplina());
+        System.out.println("actegoria actual : " + getRegistroActualDeCategoria());
+
         /**
          * Configuración tabla Aspirantes
          */
@@ -630,33 +707,48 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
         /**
          * Configuración de la tabla Disciplinas
          */
-        //Agrega las disciplinas del aspirante seleccionado
-        getTablaDisciplinasModel().setDisciplinas(getAspiranteSeleccionadoVO().getDisciplinas());
-        //Actualiza la tabla Disciplina   
-        getTablaDisciplinasModel().visualizar(getTablaDisciplinas());
-        //inhabilita la seleccion de la tabla Disciplina
-        getTablaDisciplinas().setEnabled(false);
+       
         //selecciona la fila correspondiente al nuevo aspirante seleccionado
-        this.registroActualDeDisciplina = seleccionarFilaEnTablaDisciplina(getAspiranteSeleccionadoVO()) - 1;
-        //Settea la Disciplina actual seleccionada 
-        setDisciplinaSeleccionadaVO(getTablaDisciplinasModel().obtenerDisciplinaEn(registroActualDeDisciplina));
-        //pinta la primera fila de la disciplina seleccionada
-        pintarFilaTablaDisciplina(registroActualDeDisciplina);
+        this.registroActualDeDisciplina = seleccionarFilaEnTablaDisciplina(getAspiranteSeleccionadoVO());
 
+        if (registroActualDeDisciplina > 0) {
+            registroActualDeDisciplina = registroActualDeDisciplina - 1;
+            //Settea la Disciplina actual seleccionada 
+            setDisciplinaSeleccionadaVO(getTablaDisciplinasModel().obtenerDisciplinaEn(registroActualDeDisciplina));
+            //pinta la primera fila de la disciplina seleccionada
+            pintarFilaTablaDisciplina(registroActualDeDisciplina);
+
+            /**
+             * Configuración de la tabla Categorias
+             */
+            //agrega todas Categorias 
+            getTablaCategoriasModel().setCategorias(getControlador().listarCategorias());
+            //Actualiza la tabla Categoria       
+            getTablaCategoriasModel().fireTableDataChanged();
+            //inhabilita la seleccion de la tabla Categoria
+            getTablaCategorias().setEnabled(false);
+            //Selecciona la categoria de la primera disciplina seleccionada del aspirante ingresado              
+            this.registroActualDeCategoria = seleccionarFilaEnTablaCategoria(getDisciplinaSeleccionadaVO()) - 1;
+            //pinta la categoria de la primera disciplina seleccionada del aspirante ingresado 
+            pintarFilaTablaCategoria(this.registroActualDeCategoria);
+        }
+
+        System.out.println("Despues----------------------------");
+        System.out.println("aspirante actual: " + getRegistroActualDeAspirante());
+        System.out.println("disciplina actual : " + getRegistroActualDeDisciplina());
+        System.out.println("actegoria actual : " + getRegistroActualDeCategoria());
+    }
+
+    public void seleccionarTablaAspirante(int seleccionAspirante) {
         /**
-         * Configuración de la tabla Categorias
+         * Configuración tabla Aspirantes
          */
-        //agrega todas Categorias 
-        getTablaCategoriasModel().setCategorias(getControlador().listarCategorias());
-        //Actualiza la tabla Categoria       
-        getTablaCategoriasModel().fireTableDataChanged();
-        //inhabilita la seleccion de la tabla Categoria
-        getTablaCategorias().setEnabled(false);
-        //Selecciona la categoria de la primera disciplina seleccionada del aspirante ingresado              
-        this.registroActualDeCategoria = seleccionarFilaEnTablaCategoria(getDisciplinaSeleccionadaVO()) - 1;
-        //pinta la categoria de la primera disciplina seleccionada del aspirante ingresado 
-        pintarFilaTablaCategoria(this.registroActualDeCategoria);
-
+        //Selecciona al aspirante segun la posicion de fila ingresada
+        setAspiranteSeleccionadoVO(getAspirantes().get(seleccionAspirante));
+        //pinta el  aspirante seleccionado
+        pintarFilaTablaAspirante(seleccionarFilaEnTablaAspirante(getAspiranteSeleccionadoVO()) - 1);
+        //Actualiza la tabla Aspirante
+        getTablaAspirantesModel().fireTableDataChanged();
     }
 
     public int seleccionarFilaEnTablaAspirante(AspiranteVO aspiranteSeleccionado) {
@@ -734,6 +826,16 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
      *-------------------------Tabla Disciplina---------------------------------
      *--------------------------------------------------------------------------
      */
+    public void seleccionarPrimerDisciplinaActivaEnTablaDisciplina(AspiranteVO aspiranteSeleccionado) {
+        //selecciona la fila correspondiente al nuevo aspirante seleccionado
+        this.registroActualDeDisciplina = getTablaDisciplinasModel().obtenerLaPrimeraDisciplinaActivaEn(aspiranteSeleccionado);
+        //Settea la Disciplina actual seleccionada 
+        setDisciplinaSeleccionadaVO(getTablaDisciplinasModel().obtenerDisciplinaEn(registroActualDeDisciplina));
+        //pinta la primera fila de la disciplina seleccionada
+        pintarFilaTablaDisciplina(registroActualDeDisciplina);
+
+    }
+
     public DisciplinaVO seleccionarDisciplina() {
         DisciplinaVO retorno = null;
         int filaSeleccionada = tablaDisciplinas.getSelectedRow();
@@ -768,54 +870,82 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
         return retorno;
     }
 
+    public int obtenerProximaDisciplinaActiva(AspiranteVO aspiranteVOActual, DisciplinaVO disciplinaVoActual) {
+        int retorno = tablaDisciplinasModel.obtenerProximaDisciplinaActiva(aspiranteVOActual, disciplinaSeleccionadaVO);
+        return retorno;
+    }
+
     public void pintarFilaTablaDisciplina(int filaSeleccionada) {
         ResaltadorDeTabla rst = new ResaltadorDeTabla(filaSeleccionada);
         this.tablaDisciplinas.setDefaultRenderer(Object.class, rst);
     }
 
     public void modificarDisciplinas(AspiranteVO aspiranteVO) {
+        if(!aspiranteVO.isCompleto()){
+        if (getRegistrosTotalesDeAspirantes() > 0) {//SI Hay aspirantes cargados 
+            int proximoAspirante = 0;
+            getTablaDisciplinas().setEnabled(false);
+            getJbtn_confirmarDisciplinas().setEnabled(false);
 
-        if (getRegistrosTotalesDeAspirantes() > 0 && getRegistroActualDeAspirante() < getRegistrosTotalesDeAspirantes()) {
-            int faseModificacionDisciplina = JOptionPane.showConfirmDialog(this, "¿Desea Modificar las Disciplinas por Defecto? \n del aspirante " + aspiranteVO.getAspirante().getNombres() + " " + aspiranteVO.getAspirante().getApellido(), "Modificar Categoria!", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+            if (getRegistroActualDeAspirante() < getRegistrosTotalesDeAspirantes()) {//SI "el registro actual es menor que el registro total"
 
-            if (faseModificacionDisciplina == 0) {//SI
-                System.out.println("Modifica");
-                getTablaDisciplinas().setEnabled(true);
-                getJbtn_confirmarDisciplinas().setEnabled(true);
+                /**
+                 * Tabla aspirante --> aspiranteSeleccionadoVO Tabla
+                 * disciplina--> primer disciplina activa del
+                 * aspiranteSeleccionadoVO Tabla Categoria --> de la disciplina
+                 * activa, selecciona la categoria
+                 */
+                seleccionarTablas(getRegistroActualDeAspirante());
 
-            } else {//NO --Pasa al siguiente
-                getTablaDisciplinas().setEnabled(false);
-                getJbtn_confirmarDisciplinas().setEnabled(false);
-                setRegistroActualDeAspirante(getRegistroActualDeAspirante() + 1);
-                if (getRegistroActualDeAspirante() < getRegistrosTotalesDeAspirantes()) {
-                    //posiciona las tablas
-                    seleccionarTablas(getRegistroActualDeAspirante());
-                    //se llama a si mismo
-                    modificarDisciplinas(getAspirantes().get(getRegistroActualDeAspirante()));
+                int faseModificacionDisciplina = JOptionPane.showConfirmDialog(this, "¿Desea Modificar las Disciplinas por Defecto? \n        del aspirante " + aspiranteVO.getAspirante().getNombres() + " " + aspiranteVO.getAspirante().getApellido(), "Modificar Disciplinas!", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
 
-                } else {//Llega al final de la lista
-                    System.out.println("llego al final por el proceso");
+                if (faseModificacionDisciplina == 0) {//SI MODIFICA DISCIPLINA --> "Modifica las disciplinas del actual aspirante"
+                    getTablaDisciplinas().setEnabled(true);
+                    getJbtn_confirmarDisciplinas().setEnabled(true);
 
-                    //posiciona las tablas en el primer registro
-                    seleccionarTablas(0);
+                } else {//NO MODIFICA DISCIPLINA --> "pasa al siguiente aspirante"
+                    proximoAspirante = getRegistroActualDeAspirante() + 1;
 
-                    //setea los registros a recorrer
-                    setRegistrosTotalesDeAspirantes(getAspirantes().size());
-                    //Setea el primer registro
-                    setRegistroActualDeAspirante(0);
+                    if (proximoAspirante < getRegistrosTotalesDeAspirantes()) {//SI Existe proximo aspirante
+                        //Setea proximo aspirante
+                        setRegistroActualDeAspirante(proximoAspirante);
 
-                    //setea las disciplinas del 1er aspitante
-                    setRegistrosTotalesDeDisciplinas(calcularRegistrosTotalesDeDisciplinas(getAspiranteSeleccionadoVO().getDisciplinas()));
+                        /**
+                         * Tabla aspirante --> aspiranteSeleccionadoVO Tabla
+                         * disciplina--> primer disciplina activa del
+                         * aspiranteSeleccionadoVO Tabla Categoria --> de la
+                         * disciplina activa, selecciona la categoria
+                         */
+                        seleccionarTablas(getRegistroActualDeAspirante());
 
-                    modificarCategoriasDeDisciplinas(getAspiranteSeleccionadoVO());
+                        //Recursividad con proximo aspirante
+                        modificarDisciplinas(getAspiranteSeleccionadoVO());
+
+                    } else {//No existe proximo aspirante
+                        //posicionar 1er registro   
+
+                        //posicionar 1er registro    
+                        setRegistroActualDeAspirante(0);
+
+                        /**
+                         * Tabla aspirante --> aspiranteSeleccionadoVO Tabla
+                         * disciplina--> primer disciplina activa del
+                         * aspiranteSeleccionadoVO Tabla Categoria --> de la
+                         * disciplina activa, selecciona la categoria
+                         */
+                        seleccionarTablas(getRegistroActualDeAspirante());
+
+                        modificarCategoriasDeDisciplinas(getAspiranteSeleccionadoVO());
+                    }
 
                 }
-
+            } else {//NO "el registro actual es mayor que el registro total"
+                System.out.println("No hay mas disciplinas");
             }
-        } else {
-            System.out.println("no hay registros");
+        } else {//NO Hay aspirantes cargados
+            System.out.println("No Hay aspirantes cargados");
         }
-
+    }
     }
 
     public int calcularRegistrosTotalesDeDisciplinas(List<DisciplinaVO> disciplinas) {
@@ -829,10 +959,10 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
         return cantidadDisciplinasSeleccionadas;
     }
 
-    public void pintarDisciplinaConCategoria(int fila){
-        
-        /**asd
-         * Configuración de la tabla Disciplinas
+    public void pintarDisciplinaConCategoria(int fila) {
+
+        /**
+         * asd Configuración de la tabla Disciplinas
          */
         //Agrega las disciplinas del aspirante seleccionado
         getTablaDisciplinasModel().setDisciplinas(getAspiranteSeleccionadoVO().getDisciplinas());
@@ -840,7 +970,7 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
         getTablaDisciplinasModel().visualizar(getTablaDisciplinas());
         //inhabilita la seleccion de la tabla Disciplina
         getTablaDisciplinas().setEnabled(false);
-        
+
         //Settea la Disciplina actual seleccionada 
         setDisciplinaSeleccionadaVO(getTablaDisciplinasModel().obtenerDisciplinaEn(registroActualDeDisciplina));
         //pinta la primera fila de la disciplina seleccionada
@@ -866,6 +996,16 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
      *-------------------------Tabla Categoria----------------------------------
      *--------------------------------------------------------------------------
      */
+    public Categoria seleccionarCategoria() {
+        Categoria retorno = null;
+        int filaSeleccionada = tablaCategorias.getSelectedRow();
+        // validamos que haya una fila seleccionada
+        if (filaSeleccionada >= 0) {
+            retorno = tablaCategoriasModel.obtenerCategoriaEn(filaSeleccionada);
+        }
+        return retorno;
+    }
+
     public void seleccionarCategoriaDeDisciplina(int filaDisciplina) {
 
         //Setea la Disciplina segun la fila seleccionada 
@@ -896,89 +1036,152 @@ public class UIRegistrarAspirante extends javax.swing.JFrame {
     }
 
     //Mofificar Categoria
-    public void modificarCategoriasDeDisciplinas(AspiranteVO aspiranteVO) {
-        int proximaDisciplina = 0;
-        
-
-        System.out.println("fila de disciplina: " + obtenerFilaDeDisciplina(getAspiranteSeleccionadoVO(), getDisciplinaSeleccionadaVO()));
-        //pintar disciplina actual
-        pintarDisciplinaConCategoria(obtenerFilaDeDisciplina(getAspiranteSeleccionadoVO(), getDisciplinaSeleccionadaVO()));
-
-        //aspirante actual
-        if (getRegistrosTotalesDeAspirantes() > 0 && getRegistroActualDeAspirante() < getRegistrosTotalesDeAspirantes()) {
-
-            //disciplina actual
-            if (getRegistrosTotalesDeDisciplinas() > 0 && getRegistroActualDeDisciplina() < getRegistrosTotalesDeDisciplinas()) {
-                int faseModificacionCategoria = JOptionPane.showConfirmDialog(this, "¿Desea Modificar la Categoria por Defecto? \n de la disciplina " + "'" + getDisciplinaSeleccionadaVO().getDisciplina().getNombre() + "'", "Modificar Categoria!", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
-
-                if (faseModificacionCategoria == 0) {//SI Modifica Categoria de Disciplina
-
-                } else {//NO modifica y pasa a la siguiente disiplina
-                    proximaDisciplina = getRegistroActualDeDisciplina() + 1;
-                    if (proximaDisciplina < getRegistrosTotalesDeDisciplinas()) {
-                        setRegistroActualDeDisciplina(proximaDisciplina);
-
-                        setDisciplinaSeleccionadaVO(seleccionarDisciplinaPorFila(proximaDisciplina));
-                        //posicionarDisciplina;
-
-                        modificarCategoriasDeDisciplinas(this.getAspiranteSeleccionadoVO());
-                    }else{
-                        System.out.println("No hay mas disciplinas del aspirante");
-                    }
-
-                }
-
-            } else {
-                System.out.println("final de disciplinas del aspirante");
-                //pasar al siguiente aspirante y llamar al metodo
-            }
-
-        } else {
-            System.out.println("no hay registros");
-        }
-
-        /*
-        
-        setRegistroActualDeAspirante(getRegistroActualDeAspirante() + 1);
-        if (getRegistroActualDeAspirante() < getRegistrosTotalesDeAspirantes()) {
-            //posiciona las tablas
-            seleccionarTablas(getRegistroActualDeAspirante());
-        
-        
-        if (getRegistrosTotalesDeAspirantes() > 0 && getRegistroActualDeAspirante() < getRegistrosTotalesDeAspirantes()) {
-            int faseModificacionCategoria = JOptionPane.showConfirmDialog(this, "¿Desea Modificar la Categoria por Defecto? \n del aspirante " + aspiranteVO.getAspirante().getNombres() + " " + aspiranteVO.getAspirante().getApellido(), "Modificar Categoria!", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
-
-            if (faseModificacionCategoria == 0) {//SI
-                System.out.println("Modifica");
-                getTablaCategorias().setEnabled(true);
-                getJbtn_confirmarDisciplinas().setEnabled(true);
-
-            } else {//NO --Pasa al siguiente Disciplina
+    public void modificarCategoriasDeDisciplinas(AspiranteVO aspiranteVOActual) {
+        if(!aspiranteVOActual.isCompleto()){
+        if (getRegistrosTotalesDeAspirantes() > 0) {//SI --> Existen aspirantes en la lista            
+            if (getRegistroActualDeAspirante() < getRegistrosTotalesDeAspirantes()) {//SI--> el aspirante esta dentro de la lista
+                int proximoAspirante = 0;
                 getTablaCategorias().setEnabled(false);
                 getJbtn_confirmarCategoriaDisciplina().setEnabled(false);
+                //obtener la cantidad de disciplinas del aspirante
+                setRegistrosTotalesDeDisciplinas(calcularRegistrosTotalesDeDisciplinas(aspiranteVOActual.getDisciplinas()));
 
-                //disciplina actual seleccionada
-                
-                
-                //setRegistroActualDeAspirante(getRegistroActualDeAspirante() + 1);
+                if (getRegistrosTotalesDeDisciplinas() > 0) {//SI el aspirante tiene disciplinas activas         
+                    if (aspiranteVOActual.getDisciplinas().get(getRegistroActualDeDisciplina()).getActivo()) {//SI --> la disciplina esta activa
+                        pintarDisciplinaConCategoria(getRegistroActualDeDisciplina());
 
-//                setRegistroActualDeAspirante(getRegistroActualDeAspirante() + 1);
-//                if (getRegistroActualDeAspirante() < getRegistrosTotalesDeAspirantes()) {
-//                    //posiciona las tablas
-//                    seleccionarTablas(getRegistroActualDeAspirante());
-//                    //se llama a si mismo
-//                    modificarCategoriasDeDisciplinas(getAspirantes().get(getRegistroActualDeAspirante()));
-//
-//                } else {//Llega al final de la lista
-//                    System.out.println("llego al final por el proceso");
-//                    //llarmar al metodo modificarCategoria
-//                    //aplicar nuevos metodos de verificación
-//                }
+                        int faseModificacionCategoria = JOptionPane.showConfirmDialog(this, "¿Desea Modificar la Categoria de la Disciplina? \n " + getDisciplinaSeleccionadaVO().getDisciplina().getNombre() + "\n del aspirante " + getAspiranteSeleccionadoVO().getAspirante().getNombres() + ", " + getAspiranteSeleccionadoVO().getAspirante().getApellido(), "Modificar Categoria!", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+
+                        if (faseModificacionCategoria == 0) {//SI MODIFICA Categoria --> "Modifica la categoria de la actual disciplina"
+                            getTablaCategorias().setEnabled(true);
+                            getJbtn_confirmarCategoriaDisciplina().setEnabled(true);
+
+                        } else {//NO MODIFICA Categoria --> "pasa a la siguiente disciplina"
+                            //proxima disciplinaas
+                            int proximaDisciplina = obtenerProximaDisciplinaActiva(aspiranteSeleccionadoVO, disciplinaSeleccionadaVO);
+                            System.out.println("proxima disciplina " + proximaDisciplina);
+                            if (proximaDisciplina > 0) {//SI existe proxima Disciplina
+
+                                //proxima disciplina activa del aspirante actual
+                                setRegistroActualDeDisciplina(proximaDisciplina);
+                                setDisciplinaSeleccionadaVO(getAspirantes().get(seleccionarFilaEnTablaAspirante(aspiranteSeleccionadoVO) - 1).getDisciplinas().get(proximaDisciplina));
+
+                                //categoria de la proxima disciplina
+                                setCategoriaSeleccionada(getAspirantes().get(seleccionarFilaEnTablaAspirante(aspiranteSeleccionadoVO) - 1).getDisciplinas().get(proximaDisciplina).getCategoria());
+
+                                modificarCategoriasDeDisciplinas(this.getAspiranteSeleccionadoVO());
+
+                            } else {//NO existe proxima Disciplina
+                                //1-pasa al siguiente aspirante
+                                //2-posiciona primera disciplina activa
+                                //3-llama al metodo
+
+                                proximoAspirante = getRegistroActualDeAspirante() + 1;
+
+                                if (proximoAspirante < getRegistrosTotalesDeAspirantes()) {//SI Existe proximo aspirante
+                                    //Setea proximo aspirante
+                                    setRegistroActualDeAspirante(proximoAspirante);
+                                    /**
+                                     * Tabla aspirante -->
+                                     * aspiranteSeleccionadoVO Tabla
+                                     * disciplina--> primer disciplina activa
+                                     * del aspiranteSeleccionadoVO Tabla
+                                     * Categoria --> de la disciplina activa,
+                                     * selecciona la categoria
+                                     */
+                                    seleccionarTablas(getRegistroActualDeAspirante());
+                                    //Recursividad con proximo aspirante
+                                    modificarCategoriasDeDisciplinas(getAspiranteSeleccionadoVO());
+
+                                } else {//No existe proximo aspirante
+                                    //posicionar 1er registro    
+                                    setRegistroActualDeAspirante(0);
+                                    /**
+                                     * Tabla aspirante -->
+                                     * aspiranteSeleccionadoVO Tabla
+                                     * disciplina--> primer disciplina activa
+                                     * del aspiranteSeleccionadoVO Tabla
+                                     * Categoria --> de la disciplina activa,
+                                     * selecciona la categoria
+                                     */
+                                    seleccionarTablas(getRegistroActualDeAspirante());
+                                    //llama a la validacion
+                                    System.out.println("validación por Proceso aca");
+                                    this.jbtn_Aceptar.setEnabled(true);
+                                }
+
+                            }
+
+                        }
+
+                    } else {//NO --> la disciplina no esta activa
+                        System.out.println("inactivo");
+                    }
+
+                } else {// el aspirante no tiene seleccionada ninguna disciplina activa
+                    //siguiente aspirante
+                    proximoAspirante = getRegistroActualDeAspirante() + 1;
+
+                    if (proximoAspirante < getRegistrosTotalesDeAspirantes()) {//SI Existe proximo aspirante
+                        //Setea proximo aspirante
+                        setRegistroActualDeAspirante(proximoAspirante);
+
+                        /**
+                         * Tabla aspirante --> aspiranteSeleccionadoVO Tabla
+                         * disciplina--> primer disciplina activa del
+                         * aspiranteSeleccionadoVO Tabla Categoria --> de la
+                         * disciplina activa, selecciona la categoria
+                         */
+                        seleccionarTablas(getRegistroActualDeAspirante());
+
+                        //Recursividad con proximo aspirante
+                        modificarCategoriasDeDisciplinas(getAspiranteSeleccionadoVO());
+
+                    } else {//No existe proximo aspirante
+                        System.out.println("llego al final por el proceso");
+                        System.out.println("empezar proceso de validacion");
+
+                        //posicionar 1er registro   
+                        //posicionar 1er registro    
+                        setRegistroActualDeAspirante(0);
+
+                        /**
+                         * Tabla aspirante --> aspiranteSeleccionadoVO Tabla
+                         * disciplina--> primer disciplina activa del
+                         * aspiranteSeleccionadoVO Tabla Categoria --> de la
+                         * disciplina activa, selecciona la categoria
+                         */
+                        seleccionarTablas(getRegistroActualDeAspirante());
+
+                        this.jbtn_Aceptar.setEnabled(true);
+                    }
+                }
+
+                //1- pitar disciplina con su categoria
+                //pintarDisciplinaConCategoria(obtenerFilaDeDisciplina(aspiranteVOActual, disciplinaVOActual));
+                //2-
+            } else {//NO--> el aspirante no esta dentro de la lista
+                System.out.println("Fin del registro de aspirantes");
+                System.out.println("Comenzar validación");
             }
-        } else {
-            System.out.println("no hay registros");
+
+        } else {//NO --> No Existen aspirantes en la lista   
         }
-         */
+    }
     }
 
+    public void agregarDisciplinasVacias(AspiranteVO aspiranteActual) {
+
+        seleccionarTablas(tablaAspirantesModel.obtenerAspiranteEn(aspiranteSeleccionadoVO) - 1);
+
+        int faseModificacionCategoria = JOptionPane.showConfirmDialog(this, "Seleccione Disciplinas \n " + "para el aspirante " + aspiranteActual.getAspirante().getNombres() + ", " + aspiranteActual.getAspirante().getApellido(), "Ingresar Disciplinas!", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+
+        if (faseModificacionCategoria == 0) {//SI MODIFICA Categoria --> "Modifica la categoria de la actual disciplina"
+            getTablaDisciplinas().setEnabled(true);
+            getJbtn_confirmarDisciplinas().setEnabled(true);            
+
+        } else {
+            agregarDisciplinasVacias(aspiranteActual);
+        }
+    }
 }

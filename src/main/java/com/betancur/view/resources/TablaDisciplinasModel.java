@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Ariel
  */
 public class TablaDisciplinasModel extends AbstractTableModel {
+
     private final UIRegistrarAspirante pantallaRegistrarAspirante;
     private static final String[] COLUMNAS = {""};
 
@@ -36,8 +37,7 @@ public class TablaDisciplinasModel extends AbstractTableModel {
     }
 
     public void visualizar(JTable tabla) {
-        
-        
+
         tabla.setDefaultRenderer(Object.class, new RenderJButton());
 
         DefaultTableModel dt = new DefaultTableModel(new String[]{"", "Disciplina"}, 0) {
@@ -70,9 +70,9 @@ public class TablaDisciplinasModel extends AbstractTableModel {
 
         }
 
-        tabla.setModel(dt);        
+        tabla.setModel(dt);
         tabla.getModel().addTableModelListener(new TablaDisciplinaModelListener(pantallaRegistrarAspirante));
-        
+
         tabla.getColumnModel().getColumn(0).setPreferredWidth(20);
         tabla.getColumnModel().getColumn(1).setPreferredWidth(220);
     }
@@ -105,7 +105,7 @@ public class TablaDisciplinasModel extends AbstractTableModel {
             case 0:
                 retorno = aspirante.getActivo();
                 break;
-            case 1:                
+            case 1:
                 retorno = aspirante.getDisciplina().getNombre();
                 break;
         }
@@ -126,7 +126,7 @@ public class TablaDisciplinasModel extends AbstractTableModel {
 
     public int obtenerLaPrimeraDisciplinaActivaEn(AspiranteVO aspirante) {
         boolean primeraEncontrada = false;
-        int filaDisciplina = 0;
+        int filaDisciplina = -1;
         int filaRecorrido = 0;
         for (DisciplinaVO disciplinaeRecorrido : aspirante.getDisciplinas()) {
             filaRecorrido = filaRecorrido + 1;
@@ -138,14 +138,37 @@ public class TablaDisciplinasModel extends AbstractTableModel {
         return filaDisciplina;
     }
 
-    public int obtenerFilaDeDisciplina(AspiranteVO aspirante, DisciplinaVO disciplinaSeleccionadaVO){
+    public int obtenerFilaDeDisciplina(AspiranteVO aspirante, DisciplinaVO disciplinaSeleccionadaVO) {
         int filaDisciplina = 0;
         int filaRecorrido = 0;
         for (DisciplinaVO disciplinaeRecorrido : aspirante.getDisciplinas()) {
-            filaRecorrido = filaRecorrido + 1;
-            if (disciplinaeRecorrido.getDisciplina() ==  disciplinaSeleccionadaVO.getDisciplina()) {
+            
+            if (disciplinaeRecorrido.getDisciplina() == disciplinaSeleccionadaVO.getDisciplina()) {
                 filaDisciplina = filaRecorrido;
             }
+            filaRecorrido = filaRecorrido + 1;
+        }
+        return filaDisciplina;
+    }
+
+    public int obtenerProximaDisciplinaActiva(AspiranteVO aspirante, DisciplinaVO disciplinaSeleccionadaVO) {
+        
+        boolean encontrado=false;
+        int disciplinaActual = 0;
+        disciplinaActual = obtenerFilaDeDisciplina(aspirante, disciplinaSeleccionadaVO);
+        int filaDisciplina = -1;
+        int filaRecorrido = 0;
+        if (disciplinaActual < disciplinas.size()) {
+            for (DisciplinaVO disciplinaeRecorrido : aspirante.getDisciplinas()) {
+                
+                if (disciplinaeRecorrido.getActivo() == true && disciplinaActual < filaRecorrido && encontrado==false) {
+                    filaDisciplina = filaRecorrido;
+                    encontrado = true;
+                }
+                filaRecorrido = filaRecorrido + 1;
+            }
+        }else{
+            filaDisciplina = 0;
         }
         return filaDisciplina;
     }

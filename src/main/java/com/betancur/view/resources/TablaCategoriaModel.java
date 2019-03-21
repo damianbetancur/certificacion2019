@@ -5,9 +5,7 @@
  */
 package com.betancur.view.resources;
 
-
 import com.betancur.Categoria;
-import com.betancur.Disciplina;
 import com.betancur.vo.DisciplinaVO;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -16,9 +14,10 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Ariel
  */
-public class TablaCategoriaModel extends AbstractTableModel{
+public class TablaCategoriaModel extends AbstractTableModel {
+
     private static final String[] COLUMNAS = {""};
-    
+
     private List<Categoria> categorias;
 
     public TablaCategoriaModel() {
@@ -42,17 +41,17 @@ public class TablaCategoriaModel extends AbstractTableModel{
     public Object getValueAt(int fila, int columna) {
         Object retorno = null;
         Categoria categoria = categorias.get(fila);
-        
+
         // según la columna deseada obtenemos el valor a mostrar
         switch (columna) {
             case 0:
                 retorno = categoria.getNombreCategoria();
-                break;            
+                break;
         }
-        
+
         return retorno;
     }
-    
+
     @Override
     public String getColumnName(int index) {
         return COLUMNAS[index];
@@ -61,16 +60,33 @@ public class TablaCategoriaModel extends AbstractTableModel{
     public void setCategorias(List<Categoria> categorias) {
         this.categorias = categorias;
     }
-    
-    public int obtenerFilaDeCategoriaDeDisciplinaActiva(DisciplinaVO disciplinaParametro) {        
+
+    public int obtenerFilaDeCategoriaDeDisciplinaActiva(DisciplinaVO disciplinaParametro) {
         int filaCategoria = 0;
         int contador = 0;
-        for (Categoria categoria : categorias) {            
+        for (Categoria categoria : categorias) {
             contador = contador + 1;
             if (categoria.getId() == disciplinaParametro.getCategoria().getId()) {
                 filaCategoria = contador;
             }
         }
         return filaCategoria;
+    }
+
+    public Categoria obtenerCategoriaEn(int fila) {
+        return categorias.get(fila);
+    }
+
+    public int obtenerFilaDeCategoria(Categoria categoria) {
+        int filaCategoria = 0;
+        int contador = 0;
+        for (Categoria categoriaR : categorias) {
+            contador = contador + 1;
+            if (categoriaR.getId() == categoria.getId()) {
+                filaCategoria = contador;
+            }
+        }
+        return filaCategoria;
+
     }
 }
