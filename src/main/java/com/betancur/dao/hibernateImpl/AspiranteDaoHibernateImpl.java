@@ -25,10 +25,10 @@ public class AspiranteDaoHibernateImpl implements AspiranteDao{
     
     
     @Override
-    public Aspirante buscarPorNombre(String nombre) {
+    public Aspirante buscarPorID(Long id) {
         Session session = sessionFactory.openSession();
         
-        Aspirante aspirante = (Aspirante) session.createQuery("SELECT a FROM Aspirante a WHERE nombres=:nombre").setParameter("nombre", nombre).uniqueResult();
+        Aspirante aspirante = (Aspirante) session.createQuery("SELECT a FROM Aspirante a WHERE id=:id").setParameter("id", id).uniqueResult();
                 
         return aspirante;
     }
@@ -45,6 +45,16 @@ public class AspiranteDaoHibernateImpl implements AspiranteDao{
         session.close();
         
         return aspirantes;
+    }
+
+    @Override
+    public Long guardar(Aspirante nuevoAspirante) {
+        Session session = this.sessionFactory.openSession();
+        session.beginTransaction();         
+        Long idGenerado = ( Long )session.save(nuevoAspirante); 
+        session.getTransaction().commit();
+        session.close();
+        return idGenerado;
     }
     
 }

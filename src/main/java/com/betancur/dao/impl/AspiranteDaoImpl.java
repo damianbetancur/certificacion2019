@@ -21,14 +21,14 @@ public class AspiranteDaoImpl implements AspiranteDao{
     
     
     @Override
-    public Aspirante buscarPorNombre(String nombre) {
+    public Aspirante buscarPorID(Long id) {
         Aspirante retorno = null;
         
         Iterator<Aspirante> iter = aspirantes.iterator();
         while (iter.hasNext()) {
             Aspirante actual = iter.next();
             
-            if (actual.getNombres().equals(nombre)) {
+            if (actual.getId().equals(id)) {
                 retorno = actual;
                 break;
             }
@@ -45,6 +45,13 @@ public class AspiranteDaoImpl implements AspiranteDao{
             Aspirante actual = iter.next();
                 retorno.add(actual);
         }
+        return retorno;
+    }
+
+    @Override
+    public Long guardar(Aspirante nuevoAspirante) {
+        Long retorno = 0l;
+        this.aspirantes.add(nuevoAspirante);
         return retorno;
     }
     

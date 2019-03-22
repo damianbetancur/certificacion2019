@@ -8,11 +8,17 @@
             <column name="id" />
             <generator class="identity" />
         </id>
+        
         <many-to-one name="aspirante" class="com.betancur.Aspirante" fetch="select">
             <column name="id_aspitante" not-null="true" />
         </many-to-one>
-
-        <many-to-one name="competencia" class="com.betancur.Competencia" column="id_competencia" lazy="false" insert="false" update="false" />
+        
+       
+       
+       <many-to-one name="competencia" class="com.betancur.Competencia" fetch="select">
+            <column name="id_competencia" not-null="true" />
+        </many-to-one>
+       
         
         <property name="estadoInscripcion" type="java.lang.Boolean">
             <column name="estadoInscripcion" />

@@ -27,10 +27,14 @@
           <one-to-many class="com.betancur.Competidor" />
         </bag>
         
-        <bag name="inscripciones" cascade="all" lazy="false">
-          <key column="id_competencia" not-null="true" />
-          <one-to-many class="com.betancur.Inscripcion" />
-        </bag>
+        
+        <set name="inscripciones" table="inscripcion" 
+				inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_competencia" not-null="true" />
+            </key>
+            <one-to-many class="com.betancur.Inscripcion" />
+        </set>
                 
     </class>
 </hibernate-mapping>

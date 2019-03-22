@@ -2,7 +2,9 @@ package com.betancur;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Competencia{
      private Long id;
@@ -11,11 +13,12 @@ public class Competencia{
      private Date fechaCompetencia;
      private Date horaCompetencia;
      private List<Competidor> competidores;
-     private List<Inscripcion> inscripciones;
+     //private List<Inscripcion> inscripciones;
 
+     private Set<Inscripcion> inscripciones = 
+				new HashSet<Inscripcion>(0);
     public Competencia() {
         this.competidores = new ArrayList<>();
-        this.inscripciones = new ArrayList<>();
     }
 
 	
@@ -23,7 +26,6 @@ public class Competencia{
         this.categoria = categoria;
         this.disciplina = disciplina;
         this.competidores = new ArrayList<>();
-        this.inscripciones = new ArrayList<>();
     }
     public Competencia(Categoria categoria, Disciplina disciplina, Date fechaCompetencia, Date horaCompetencia) {
        this.categoria = categoria;
@@ -31,7 +33,7 @@ public class Competencia{
        this.fechaCompetencia = fechaCompetencia;
        this.horaCompetencia = horaCompetencia;
        this.competidores = new ArrayList<>();
-       this.inscripciones = new ArrayList<>();
+       //this.inscripciones = new ArrayList<>();
     }
    
     public Long getId() {
@@ -78,13 +80,14 @@ public class Competencia{
         this.competidores = competidores;
     }
 
-    public List<Inscripcion> getInscripciones() {
+    public Set<Inscripcion> getInscripciones() {
         return inscripciones;
     }
 
-    public void setInscripciones(List<Inscripcion> inscripciones) {
+    public void setInscripciones(Set<Inscripcion> inscripciones) {
         this.inscripciones = inscripciones;
     }
+
     
     
 
